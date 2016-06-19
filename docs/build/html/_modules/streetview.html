@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>streetview &mdash; streetview 0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="streetview 0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> streetview
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="simple">
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">streetview</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+        <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>streetview</li>
+    <li class="wy-breadcrumbs-aside">
+      
+          
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for streetview</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">:Module: ``streetview``</span>
+<span class="sd">:Author: `Adrian Letchford &lt;http://www.dradrian.com&gt;`_</span>
+<span class="sd">:Organisation: `Warwick Business School &lt;http://www.wbs.ac.uk/&gt;`_, `University of Warwick &lt;http://www.warwick.ac.uk/&gt;`_.</span>
+
+
+<span class="sd">This is a light module for downloading photos from Google street view. The</span>
+<span class="sd">functions allow you to retrieve current and **old** photos.</span>
+
+<span class="sd">The photos on Google street view are panoramas and are refered to as such.</span>
+<span class="sd">However, you have the option of downloading flat photos, or panoramas.</span>
+
+<span class="sd">Retrieving photos is a two step process. First, you must translate GPS</span>
+<span class="sd">coordinates into panorama ids. The following code retrieves a list of</span>
+<span class="sd">the closest panoramas giving you their id and date:</span>
+
+<span class="sd">&gt;&gt;&gt; import streetview</span>
+<span class="sd">&gt;&gt;&gt; panoids = streetview.panoids(lat, lon)</span>
+
+<span class="sd">You can then use the panorama ids to download photos with the following </span>
+<span class="sd">function:</span>
+
+<span class="sd">&gt;&gt;&gt; streetview.api_download(panoid, heading, flat_dir, key)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">_panoids_url</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds the URL of the script on Google&#39;s servers that returns the closest</span>
+<span class="sd">    panoramas (ids) to a give GPS coordinate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;https://maps.googleapis.com/maps/api/js/GeoPhotoService.SingleImageSearch?pb=!1m5!1sapiv3!5sUS!11m2!1m1!1b0!2m4!1m2!3d{0:}!4d{1:}!2d50!3m10!2m2!1sen!2sGB!9m1!1e2!11m4!1m3!1e2!2b1!3e2!4m10!1e1!1e2!1e3!1e4!1e8!1e6!5m1!1e2!6m1!1e2&amp;callback=_xdc_._v2mub5&quot;</span>
+    <span class="k">return</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_panoids_data</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the response of the script on Google&#39;s servers that returns the </span>
+<span class="sd">    closest panoramas (ids) to a give GPS coordinate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">_panoids_url</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    
+    
+<div class="viewcode-block" id="panoids"><a class="viewcode-back" href="../index.html#streetview.panoids">[docs]</a><span class="k">def</span> <span class="nf">panoids</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the closest panoramas (ids) to the GPS coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">_panoids_data</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span>
+
+    <span class="c"># Get all the panorama ids and coordinates</span>
+    <span class="c"># I think the latest panorama should be the first one. And the previous </span>
+    <span class="c"># successive ones ought to be in reverse order from bottom to top. The final</span>
+    <span class="c"># images don&#39;t seem to correspond to a particular year. So if there is one </span>
+    <span class="c"># image per year I expect them to be orded like:</span>
+    <span class="c"># 2015</span>
+    <span class="c"># XXXX</span>
+    <span class="c"># XXXX</span>
+    <span class="c"># 2012</span>
+    <span class="c"># 2013</span>
+    <span class="c"># 2014</span>
+    <span class="n">pans</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;\[2,&quot;(.+?)&quot;\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">pans</span> <span class="o">=</span> <span class="p">[{</span>
+        <span class="s">&quot;panoid&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+        <span class="s">&quot;lat&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> 
+        <span class="s">&quot;lon&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])}</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pans</span><span class="p">]</span> <span class="c"># Convert to floats</span>
+       
+    <span class="k">if</span> <span class="n">disp</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pan</span> <span class="ow">in</span> <span class="n">pans</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">pan</span>
+
+    <span class="c"># Get all the dates</span>
+    <span class="c"># The dates seem to be at the end of the file. They have a strange format but </span>
+    <span class="c"># are in the same order as the panoids except that the latest date is last</span>
+    <span class="c"># instead of first. They also appear to have the index of the panorama before</span>
+    <span class="c"># them. However, the last date (which corresponds to the first/main panorama</span>
+    <span class="c"># doesn&#39;t have an index before it. The following regex just picks out all </span>
+    <span class="c"># values that looks like dates and the preceeding index.</span>
+    <span class="n">dates</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;([0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">]</span>
+
+    <span class="c"># Make sure the month value is between 1-12</span>
+    <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dates</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">12</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="c"># Make the first value of the dates the index</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+        <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;-1&#39;</span>
+    <span class="n">dates</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">]</span> <span class="c"># Convert all values to integers</span>
+    <span class="n">dates</span> <span class="o">=</span> <span class="p">[[</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">]</span> <span class="c"># +1 the indices</span>
+
+    <span class="c"># Merge the dates into the panorama dictionaries</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+    	<span class="n">pans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;year&#39;</span><span class="p">:</span> <span class="n">year</span><span class="p">,</span> <span class="s">&quot;month&quot;</span><span class="p">:</span> <span class="n">month</span><span class="p">})</span>
+    
+    <span class="c"># Sort the pans array </span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s">&#39;year&#39;</span><span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="s">&#39;year&#39;</span><span class="p">],</span> <span class="n">month</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="s">&#39;month&#39;</span><span class="p">],</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">datetime</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>        
+    <span class="n">pans</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">func</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pans</span>
+    
+    </div>
+<div class="viewcode-block" id="tiles_info"><a class="viewcode-back" href="../index.html#streetview.tiles_info">[docs]</a><span class="k">def</span> <span class="nf">tiles_info</span><span class="p">(</span><span class="n">panoid</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a list of a panorama&#39;s tiles and their position.</span>
+<span class="sd">    </span>
+<span class="sd">    The format is (x, y, filename, fileurl)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">image_url</span> <span class="o">=</span> <span class="s">&quot;http://cbk0.google.com/cbk?output=tile&amp;panoid={0:}&amp;zoom=5&amp;x={1:}&amp;y={2:}&quot;</span>   
+    
+    <span class="c"># The tiles positions</span>
+    <span class="n">coord</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">),</span><span class="nb">range</span><span class="p">(</span><span class="mi">13</span><span class="p">)))</span>
+    
+    <span class="n">tiles</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_</span><span class="si">%d</span><span class="s">x</span><span class="si">%d</span><span class="s">.jpg&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">image_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">coord</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">tiles</span>
+    
+    
+    </div>
+<div class="viewcode-block" id="download_tiles"><a class="viewcode-back" href="../index.html#streetview.download_tiles">[docs]</a><span class="k">def</span> <span class="nf">download_tiles</span><span class="p">(</span><span class="n">tiles</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Downloads all the tiles in a Google Stree View panorama into a directory.</span>
+<span class="sd">    </span>
+<span class="sd">    Params:</span>
+<span class="sd">        tiles - the list of tiles. This is generated by tiles_info(panoid).</span>
+<span class="sd">        directory - the directory to dump the tiles to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tiles</span><span class="p">):</span>
+    
+        <span class="k">if</span> <span class="n">disp</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Image </span><span class="si">%d</span><span class="s"> (</span><span class="si">%d</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tiles</span><span class="p">))</span>
+        
+        <span class="c"># Try to download the image file </span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">break</span>          
+            <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;Connection error. Trying again in 2 seconds.&quot;</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">response</span>
+        
+        </div>
+<div class="viewcode-block" id="stich_tiles"><a class="viewcode-back" href="../index.html#streetview.stich_tiles">[docs]</a><span class="k">def</span> <span class="nf">stich_tiles</span><span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">tiles</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">final_directory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stiches all the tiles of a panorama together. The tiles are located in</span>
+<span class="sd">    `directory&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tile_width</span> <span class="o">=</span> <span class="mi">512</span>
+    <span class="n">tile_height</span> <span class="o">=</span> <span class="mi">512</span>
+    
+    <span class="n">panorama</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">26</span><span class="o">*</span><span class="n">tile_width</span><span class="p">,</span> <span class="mi">13</span><span class="o">*</span><span class="n">tile_height</span><span class="p">))</span>
+    
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">:</span>
+        
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">fname</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        
+        <span class="n">panorama</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">im</span><span class="o">=</span><span class="n">tile</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">tile_width</span><span class="p">,</span> <span class="n">y</span><span class="o">*</span><span class="n">tile_height</span><span class="p">))</span>
+        
+        <span class="k">del</span> <span class="n">tile</span>
+        
+<span class="c">#        print fname</span>
+        
+    <span class="n">panorama</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">final_directory</span> <span class="o">+</span> <span class="p">(</span><span class="s">&quot;/</span><span class="si">%s</span><span class="s">.jpg&quot;</span> <span class="o">%</span> <span class="n">panoid</span><span class="p">))</span>
+    <span class="k">del</span> <span class="n">panorama</span>
+    
+</div>
+<span class="k">def</span> <span class="nf">delete_tiles</span><span class="p">(</span><span class="n">tiles</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        
+   
+     
+        
+<div class="viewcode-block" id="api_download"><a class="viewcode-back" href="../index.html#streetview.api_download">[docs]</a><span class="k">def</span> <span class="nf">api_download</span><span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">flat_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download an image using the official API. These are not panoramas.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        :panoid: the panorama id</span>
+<span class="sd">        :heading: the heading of the photo. Each photo is taken with a 360</span>
+<span class="sd">            camera. You need to specify a direction in degrees as the photo</span>
+<span class="sd">            will only cover a partial region of the panorama. The recommended</span>
+<span class="sd">            headings to use are 0, 90, 180, or 270.</span>
+<span class="sd">        :flat_dir: the direction to save the image to.</span>
+<span class="sd">        :key: your API key.</span>
+
+<span class="sd">    You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">fname</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">_</span><span class="si">%d</span><span class="s">.jpg&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">heading</span><span class="p">)</span>
+    
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;https://maps.googleapis.com/maps/api/streetview&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;size&quot;</span><span class="p">:</span> <span class="s">&quot;2000x2000&quot;</span><span class="p">,</span>
+        <span class="s">&quot;fov&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span>
+        <span class="s">&quot;heading&quot;</span><span class="p">:</span> <span class="n">heading</span><span class="p">,</span>
+        <span class="s">&quot;pano&quot;</span><span class="p">:</span> <span class="n">panoid</span><span class="p">,</span>
+        <span class="s">&quot;key&quot;</span><span class="p">:</span> <span class="n">key</span>
+    <span class="p">}</span>
+    
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">flat_dir</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">response</span>
+    
+    </div>
+<span class="k">def</span> <span class="nf">download_flats</span><span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">flat_dir</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">heading</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">270</span><span class="p">]:</span>
+        <span class="n">download_flat</span><span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">flat_dir</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Adrian Letchford.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

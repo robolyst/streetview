@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>streetview &mdash; streetview 0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="streetview 0 documentation" href="#"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> streetview
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="simple">
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">streetview</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>streetview</li>
+    <li class="wy-breadcrumbs-aside">
+      
+          
+          <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="streetview">
+<h1>streetview<a class="headerlink" href="#streetview" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-streetview"></span><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Module:</th><td class="field-body"><tt class="docutils literal"><span class="pre">streetview</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body"><a class="reference external" href="http://www.dradrian.com">Adrian Letchford</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Organisation:</th><td class="field-body"><a class="reference external" href="http://www.wbs.ac.uk/">Warwick Business School</a>, <a class="reference external" href="http://www.warwick.ac.uk/">University of Warwick</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>This is a light module for downloading photos from Google street view. The
+functions allow you to retrieve current and <strong>old</strong> photos.</p>
+<p>The photos on Google street view are panoramas and are refered to as such.
+However, you have the option of downloading flat photos, or panoramas.</p>
+<p>Retrieving photos is a two step process. First, you must translate GPS
+coordinates into panorama ids. The following code retrieves a list of
+the closest panoramas giving you their id and date:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">streetview</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">panoids</span> <span class="o">=</span> <span class="n">streetview</span><span class="o">.</span><span class="n">panoids</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can then use the panorama ids to download photos with the following 
+function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">streetview</span><span class="o">.</span><span class="n">api_download</span><span class="p">(</span><span class="n">panoid</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">flat_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="streetview.api_download">
+<tt class="descclassname">streetview.</tt><tt class="descname">api_download</tt><big>(</big><em>panoid</em>, <em>heading</em>, <em>flat_dir</em>, <em>key</em><big>)</big><a class="reference internal" href="_modules/streetview.html#api_download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#streetview.api_download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download an image using the official API. These are not panoramas.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">panoid:</th><td class="field-body">the panorama id</td>
+</tr>
+<tr class="field-even field"><th class="field-name">heading:</th><td class="field-body">the heading of the photo. Each photo is taken with a 360
+camera. You need to specify a direction in degrees as the photo
+will only cover a partial region of the panorama. The recommended
+headings to use are 0, 90, 180, or 270.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">flat_dir:</th><td class="field-body">the direction to save the image to.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">key:</th><td class="field-body">your API key.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>You can find instructions to obtain an API key here: <a class="reference external" href="https://developers.google.com/maps/documentation/streetview/">https://developers.google.com/maps/documentation/streetview/</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="streetview.download_tiles">
+<tt class="descclassname">streetview.</tt><tt class="descname">download_tiles</tt><big>(</big><em>tiles</em>, <em>directory</em>, <em>disp=False</em><big>)</big><a class="reference internal" href="_modules/streetview.html#download_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#streetview.download_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads all the tiles in a Google Stree View panorama into a directory.</p>
+<dl class="docutils">
+<dt>Params:</dt>
+<dd>tiles - the list of tiles. This is generated by tiles_info(panoid).
+directory - the directory to dump the tiles to.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="streetview.panoids">
+<tt class="descclassname">streetview.</tt><tt class="descname">panoids</tt><big>(</big><em>lat</em>, <em>lon</em>, <em>disp=False</em><big>)</big><a class="reference internal" href="_modules/streetview.html#panoids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#streetview.panoids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the closest panoramas (ids) to the GPS coordinates.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="streetview.stich_tiles">
+<tt class="descclassname">streetview.</tt><tt class="descname">stich_tiles</tt><big>(</big><em>panoid</em>, <em>tiles</em>, <em>directory</em>, <em>final_directory</em><big>)</big><a class="reference internal" href="_modules/streetview.html#stich_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#streetview.stich_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stiches all the tiles of a panorama together. The tiles are located in
+<a href="#id1"><span class="problematic" id="id2">`</span></a>directory&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="streetview.tiles_info">
+<tt class="descclassname">streetview.</tt><tt class="descname">tiles_info</tt><big>(</big><em>panoid</em><big>)</big><a class="reference internal" href="_modules/streetview.html#tiles_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#streetview.tiles_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a list of a panorama&#8217;s tiles and their position.</p>
+<p>The format is (x, y, filename, fileurl)</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Adrian Letchford.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
