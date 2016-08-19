@@ -11,13 +11,13 @@ Retrieving photos is a two step process. First, you must translate GPS
 coordinates into panorama ids. The following code retrieves a list of
 the closest panoramas giving you their id and date:
 
->>> import streetview
->>> panoids = streetview.panoids(lat, lon)
+	import streetview
+	panoids = streetview.panoids(lat, lon)
 
 You can then use the panorama ids to download photos with the following 
 function:
 
->>> streetview.api_download(panoid, heading, flat_dir, key)
+	streetview.api_download(panoid, heading, flat_dir, key)
 
 Full documentation is at docs/build/html/index.html
 
