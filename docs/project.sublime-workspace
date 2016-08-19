@@ -1,0 +1,420 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"bac",
+				"background-position"
+			],
+			[
+				"border",
+				"border-radius"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"academic",
+				"academic_year_name"
+			],
+			[
+				"chart",
+				"chartSelector"
+			],
+			[
+				"text",
+				"text-decoration"
+			],
+			[
+				"save",
+				"save_order"
+			],
+			[
+				"update",
+				"update_from_oanda"
+			],
+			[
+				"paddi",
+				"padding-left"
+			],
+			[
+				"Logg",
+				"LoggerTest"
+			],
+			[
+				"Data",
+				"DatabaseTest"
+			],
+			[
+				"rando",
+				"random_direction"
+			],
+			[
+				"close_",
+				"close_open_trades"
+			],
+			[
+				"acc",
+				"access_token"
+			],
+			[
+				"accoun",
+				"account_id"
+			],
+			[
+				"Game",
+				"GameCommentThread"
+			],
+			[
+				"end",
+				"end_time"
+			],
+			[
+				"get",
+				"get_token"
+			],
+			[
+				"parent",
+				"parent_id"
+			],
+			[
+				"se",
+				"sender_id"
+			],
+			[
+				"Sport",
+				"SportCategory"
+			],
+			[
+				"assert",
+				"assert_equals"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "build docs",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Google Street View Data/streetview/docs/project.sublime-project",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Google Street View Data/streetview/docs/source/index.rst",
+		"/home/adrian/Dropbox/My Products/Science Writer/App/api.sublime-project",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Google Street View Data/streetview/docs/source/conf.py",
+		"/home/adrian/Dropbox/My Research/WBS Admissions Project/code/complete package 2/docs/source/conf.py",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Google Street View Data/streetview/readme.md",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Google Street View Data/streetview/__init__.py",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Google Street View Data/google street view data/download_flat_images.py",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Google Street View Data/hack_street_view.py",
+		"/var/www/html/admissions/style.css",
+		"/var/www/html/admissions/scripts/charts.js",
+		"/var/www/html/admissions/index.html",
+		"/var/www/html/admissions/script.js",
+		"/home/adrian/Dropbox/My Money/Investments/Trading/interactivebrokerdetails",
+		"/var/www/html/admissions/scripts/require.js",
+		"/var/www/html/admissions/scripts/misc.js",
+		"/var/www/html/admissions/scripts/wrangler.js",
+		"/var/www/html/admissions/home.html",
+		"/home/adrian/Dropbox/My Documents/selling/guitar/ad",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Household survey/data/README",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Household survey/data/maps/README",
+		"/home/adrian/Dropbox/Public Image/dradrian.com/Site design 2/style.css",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Household survey/data/maps/england_oa_2011_gen_clipped.kml",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/Coventry region map/READ ME",
+		"/home/adrian/Dropbox/My Research/London Google Street View/test",
+		"/home/adrian/Dropbox/Public Image/dradrian.com/Site design 2/index.html",
+		"/home/adrian/Desktop/HouseholdSurvey/HouseholdSurvey/2012-2013/11213_CHS 2012 data (anonymous).sav",
+		"/home/adrian/Desktop/SQL injections/ga-k9.com",
+		"/home/adrian/Desktop/sqinjections",
+		"/home/adrian/Desktop/SQL injections/webinn.co.za",
+		"/home/adrian/Desktop/SQL injections/collards.co.za",
+		"/home/adrian/Desktop/wallop-2.2.4/examples/index.html",
+		"/var/www/html/CoventryInData2/infographic.php",
+		"/var/www/html/CoventryInData2/style.css",
+		"/var/www/html/CoventryInData2/zoom-master/demo.html",
+		"/var/www/html/CoventryInData2/header.php",
+		"/home/adrian/Dropbox/Public Image/dradrian.com/Site design 2/media/README",
+		"/home/adrian/Dropbox/Public Image/analysis of Ted talks.txt",
+		"/home/adrian/Dropbox/My Research/Coventry City of Culture/twitter stream/tweets-0",
+		"/home/adrian/Dropbox/My Research/WBS Admissions Project/code/complete package/wbsenroll/web/__init__.py",
+		"/home/adrian/Dropbox/My Research/WBS Admissions Project/code/complete package/runserver.py",
+		"/var/www/html/CoventryInData2/index.php",
+		"/var/www/html/CoventryInData2/relationships.php",
+		"/home/adrian/Dropbox/My Research/My Papers/Published/Birth Rate and Mortality Rates/code v3/data/demographics/psychological_distress.csv",
+		"/home/adrian/Dropbox/My Research/My Papers/Published/Birth Rate and Mortality Rates/code v3/data/demographics/diabetes.csv",
+		"/home/adrian/Dropbox/My Research/My Papers/Published/Birth Rate and Mortality Rates/code v3/data/demographics/chlamidia.csv",
+		"/home/adrian/Dropbox/My Research/My Papers/Published/Birth Rate and Mortality Rates/code v3/data/demographics/autism.csv",
+		"/var/www/html/reachemsite/index.php",
+		"/var/www/html/reachemsite/header.php",
+		"/var/www/html/reachemsite/style.css",
+		"/var/www/html/mentorkick/adrian.php",
+		"/var/www/html/mentorkick/top.php",
+		"/var/www/html/mentorkick/header.php",
+		"/var/www/html/mentorkick/rodrigo.php",
+		"/var/www/html/mentorkick/book.php",
+		"/var/www/html/mentorkick/footer.php",
+		"/var/www/html/mentorkick/index.php",
+		"/var/www/html/mentorkick/success.html",
+		"/var/www/html/mentorkick/style.css",
+		"/var/www/html/mentorkick/sendmail.php",
+		"/var/www/html/mentorkick/index.html",
+		"/var/www/html/wordpress/wp-content/plugins/contact-form-7/includes/mail.php",
+		"/var/www/html/mentorkick/book.html",
+		"/home/adrian/Desktop/Mentoring site/style.css",
+		"/home/adrian/Dropbox/My Products/Science Writer/App/app/modules/website/templates/index.html",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/strategy/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/strategies/cowboy/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/strategy/tests/tests.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/tests/test_account.py",
+		"/home/adrian/Downloads/Pan (2015) - 1080p/WWW.VPPV.LA.txt",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/project.sublime-project",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/tests/tests.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/tests/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/tests/__init__.pyc",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/account.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/prices.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/logger/tests/test_logger.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/logger/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/tests/test-order.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/oanda/tests/test_prices.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/database/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/database/tests/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/strategies/cowboy/tests/tests.py",
+		"/home/adrian/Dropbox/Investments/Index Fund/login details",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/bot.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/analysis/eurusd.csv",
+		"/home/adrian/Dropbox/My Research/Code/Web of Science/Download papers/test.html",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/wallace.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/webcontrol/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/webcontrol/app.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/strategies/randomstrat/__init__.py",
+		"/home/adrian/Dropbox/Investments/Trading/Oanda details",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/tools/build",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/modules/database/tests/test_database.py",
+		"/home/adrian/.cache/.fr-Dsuj6s/tktpass/main.php",
+		"/home/adrian/.cache/.fr-Ozv0xC/tktpass/action-brand.php",
+		"/home/adrian/.cache/.fr-8RDm0b/TKTPass/TKTPass/BuyTicketViewController.h",
+		"/home/adrian/.cache/.fr-aSEMhC/tktpass/action-users.php",
+		"/home/adrian/Dropbox/My Products/Sportmate/backend/app/modules/runtests.py",
+		"/home/adrian/Dropbox/My Products/Sportmate/backend/app/modules/users/tests/test_actions.py",
+		"/media/adrian/DATA1/Code Repositories/button-backend/button_backend.sublime-project",
+		"/home/adrian/Dropbox/My Products/Sportmate/backend/app/project.sublime-project",
+		"/home/adrian/Dropbox/My Research/Code/Web of Science/Download papers/include.py",
+		"/home/adrian/Downloads/savedrecs (1).txt",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/strategies/experiment.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/bot/strategies/randomstrat/tests/test_random.py",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/tools/copytovm",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/ReadMe.md",
+		"/home/adrian/Dropbox/Investments/Trading/trading bot/wallace",
+		"/home/adrian/Desktop/new.csv",
+		"/home/adrian/Dropbox/Christmas Lecture/Artwork/Resources/Internet Resources.txt",
+		"/home/adrian/Dropbox/Christmas Lecture/Artwork/Resources/Youtube videos.txt",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/strategies/experiment.py",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/strategies/nothing.py",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/strategies/randomstrat/__init__.py",
+		"/home/adrian/Dropbox/Trading/trading bot/nohup.out",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/oanda/tests/test_account.py",
+		"/home/adrian/Dropbox/Trading/trading bot/wallace",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/oanda/account.py",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/webcontrol/app.py",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/webcontrol/__init__.py",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/webcontrol/static/css/style.css",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/webcontrol/templates/base.html",
+		"/home/adrian/Dropbox/My Research/My Papers/Submitted Papers/Birth Rate and Mortality Rates/Submission (5) to Frontiers In Physics/paper/custom.bib",
+		"/home/adrian/Downloads/10.1007%2F978-94-017-8704-8_4.ris",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/webcontrol/templates/account.html",
+		"/home/adrian/Dropbox/Trading/trading bot/bot/modules/webcontrol/templates/accounts.html"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"\n\n",
+			"\n",
+			"Click here to view all testimonials\n\n \n	Testimonial by	",
+			"Subject: ",
+			"\n9",
+			"\n3",
+			"\n7",
+			"\n4",
+			"\n2",
+			"\n20",
+			"\n8",
+			"\n1",
+			"\n",
+			"	\n$	Detail",
+			"\n$	Detail",
+			"	\n$	Detail",
+			"\n$	Detail",
+			"%20",
+			"null",
+			"\">\n",
+			"-",
+			"–",
+			"#splash i",
+			"forecastField",
+			":	",
+			"%",
+			":	",
+			"%",
+			":	",
+			",,",
+			":	",
+			"COUNTRY",
+			"country",
+			"COUNTRY",
+			"countries",
+			".col",
+			"email",
+			"{\n",
+			"wp_mail(",
+			"3,036",
+			"form_data",
+			" 00:00:00",
+			"int",
+			".log .collapsible-body{\n	margin-left:20px;\n}",
+			"\"/>\n",
+			"RandomStrategy",
+			"NothingStrategy",
+			"ExperimentStrategy",
+			"Experiment",
+			"RandomStrategy",
+			"self.logger",
+			"Logger2",
+			"pylintrc",
+			"modules",
+			"print",
+			"locations",
+			"location",
+			"locations",
+			"]\n",
+			"parent_key",
+			"Turing",
+			"default",
+			".\n",
+			"random_string",
+			"random_token",
+			"functioncache",
+			"	window.app.installModule({\n		inputdataview: new GoogleTrendsViews.GoogleTrendsSearchView(),\n	});\n\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 276.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 650.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}

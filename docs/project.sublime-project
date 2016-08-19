@@ -1,0 +1,10 @@
+{
+	"build_systems":
+    [
+        {
+            "name": "build docs",
+            "cmd": ["make", "html"],
+			"working_dir": "$project_path"
+        }
+    ]
+}
