@@ -32,6 +32,7 @@ import time
 import shutil
 import itertools
 from PIL import Image
+from io import BytesIO
 import os
 
 def _panoids_url(lat, lon):
@@ -193,7 +194,8 @@ def delete_tiles(tiles, directory):
    
      
         
-def api_download(panoid, heading, flat_dir, key):
+def api_download(panoid, heading, flat_dir, key, width=640, height=640,
+                 fov=120, extension='jpg'):
     """
     Download an image using the official API. These are not panoramas.
 
@@ -205,24 +207,30 @@ def api_download(panoid, heading, flat_dir, key):
             headings to use are 0, 90, 180, or 270.
         :flat_dir: the direction to save the image to.
         :key: your API key.
+        :width: downloaded image width (max 640 for non-premium downloads).
+        :height: downloaded image height (max 640 for non-premium downloads).
+        :fov: image field-of-view.
+        :image_format: desired image format.
 
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
     
-    fname = "%s_%d.jpg" % (panoid, heading)
-    
+    fname = "%s_%d" % (panoid, heading)
+    image_format = extension if extension != 'jpg' else 'jpeg'
+
     url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
-        "size": "2000x2000",
-        "fov": 120,
+        # maximum permitted size for free calls
+        "size": "%dx%d" % (width, height),
+        "fov": fov,
         "heading": heading,
         "pano": panoid,
         "key": key
     }
     
     response = requests.get(url, params=params, stream=True)
-    with open(flat_dir + '/' + fname, 'wb') as out_file:
-        shutil.copyfileobj(response.raw, out_file)
+    img = Image.open(BytesIO(response.content))
+    img.save('%s/%s.%s' % (flat_dir, fname, extension), image_format)
     del response
     
     
