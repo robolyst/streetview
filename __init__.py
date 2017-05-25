@@ -89,8 +89,6 @@ def panoids(lat, lon, disp=False):
     # doesn't have an index before it. The following regex just picks out all
     # values that looks like dates and the preceeding index.
     dates = re.findall('([0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
-    print(len(pans))
-    print(dates)
     dates = [list(d) for d in dates]
 
     # Make sure the month value is between 1-12
