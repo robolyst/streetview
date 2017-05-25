@@ -88,7 +88,9 @@ def panoids(lat, lon, disp=False):
     # them. However, the last date (which corresponds to the first/main panorama
     # doesn't have an index before it. The following regex just picks out all
     # values that looks like dates and the preceeding index.
-    dates = re.findall('([0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
+    dates = re.findall('([0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
+    print(len(pans))
+    print(dates)
     dates = [list(d) for d in dates]
 
     # Make sure the month value is between 1-12
@@ -96,9 +98,8 @@ def panoids(lat, lon, disp=False):
 
     # Make the first value of the dates the index
     if len(dates) > 0 and dates[-1][0] == '':
-        dates[-1][0] = '-1'
+        dates[-1][0] = '0'
     dates = [[int(v) for v in d] for d in dates] # Convert all values to integers
-    dates = [[d[0]+1, d[1], d[2]] for d in dates] # +1 the indices
 
     # Merge the dates into the panorama dictionaries
     for i, year, month in dates:
@@ -109,10 +110,10 @@ def panoids(lat, lon, disp=False):
         if 'year'in x:
             return datetime(year=x['year'], month=x['month'], day=1)
         else:
-            return datetime(year=1000, month=1, day=1)
+            return datetime(year=3000, month=1, day=1)
     pans.sort(key=func)
 
-    return pans
+    return [pans[i] for i in range(len(dates))]
 
 
 def tiles_info(panoid):
