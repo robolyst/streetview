@@ -88,7 +88,7 @@ def panoids(lat, lon, disp=False):
     # them. However, the last date (which corresponds to the first/main panorama
     # doesn't have an index before it. The following regex just picks out all
     # values that looks like dates and the preceeding index.
-    dates = re.findall('([0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
+    dates = re.findall('([0-9]?[0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
     dates = [list(d) for d in dates]
 
     # Make sure the month value is between 1-12
