@@ -194,7 +194,7 @@ def delete_tiles(tiles, directory):
 
 
 def api_download(panoid, heading, flat_dir, key, width=640, height=640,
-                 fov=120, extension='jpg'):
+                 fov=120, pitch=0, extension='jpg', year=2017):
     """
     Download an image using the official API. These are not panoramas.
 
@@ -214,7 +214,7 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
 
-    fname = "%s_%d" % (panoid, heading)
+    fname = "%s_%s" % (year, panoid)
     image_format = extension if extension != 'jpg' else 'jpeg'
 
     url = "https://maps.googleapis.com/maps/api/streetview"
@@ -222,17 +222,26 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
         # maximum permitted size for free calls
         "size": "%dx%d" % (width, height),
         "fov": fov,
+        "pitch": pitch,
         "heading": heading,
         "pano": panoid,
         "key": key
     }
 
     response = requests.get(url, params=params, stream=True)
-    img = Image.open(BytesIO(response.content))
-    img.save('%s/%s.%s' % (flat_dir, fname, extension), image_format)
+    try:
+        img = Image.open(BytesIO(response.content))
+        filename = '%s/%s.%s' % (flat_dir, fname, extension)
+        img.save(filename, image_format)
+    except:
+        print("Image not found")
+        filename = None
     del response
+    return filename
+    
 
 
-def download_flats(panoid, flat_dir):
+def download_flats(panoid, flat_dir, key, width=400, height=300,
+                 fov=120, pitch=0, extension='jpg', year=2017):
     for heading in [0, 90, 180, 270]:
-        download_flat(panoid, heading, flat_dir)
+        api_download(panoid, heading, flat_dir, key, width, height, fov, pitch, extension, year)
