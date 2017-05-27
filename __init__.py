@@ -53,9 +53,11 @@ def _panoids_data(lat, lon):
     return requests.get(url)
 
 
-def panoids(lat, lon, disp=False):
+def panoids(lat, lon, closest=False, disp=False):
     """
     Gets the closest panoramas (ids) to the GPS coordinates.
+    If the 'closest' boolean parameter is set to true, only the closest panorama
+    will be gotten (at all the available dates)
     """
 
     resp = _panoids_data(lat, lon)
@@ -110,8 +112,11 @@ def panoids(lat, lon, disp=False):
         else:
             return datetime(year=3000, month=1, day=1)
     pans.sort(key=func)
-
-    return [pans[i] for i in range(len(dates))]
+    
+    if closest:
+        return [pans[i] for i in range(len(dates))]
+    else:
+        return pans
 
 
 def tiles_info(panoid):
