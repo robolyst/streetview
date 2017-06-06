@@ -73,7 +73,7 @@ def panoids(lat, lon, closest=False, disp=False):
     # 2012
     # 2013
     # 2014
-    pans = re.findall('\[2,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)', resp.text)
+    pans = re.findall('\[[0-9],"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)', resp.text)
     pans = [{
         "panoid": p[0],
         "lat": float(p[1]),
