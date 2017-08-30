@@ -35,6 +35,7 @@ from PIL import Image
 from io import BytesIO
 import os
 
+
 def _panoids_url(lat, lon):
     """
     Builds the URL of the script on Google's servers that returns the closest
@@ -73,11 +74,11 @@ def panoids(lat, lon, closest=False, disp=False):
     # 2012
     # 2013
     # 2014
-    pans = re.findall('\[[0-9],"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)', resp.text)
+    pans = re.findall('\[[0-9]+,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)', resp.text)
     pans = [{
         "panoid": p[0],
         "lat": float(p[1]),
-        "lon": float(p[2])} for p in pans] # Convert to floats
+        "lon": float(p[2])} for p in pans]  # Convert to floats
 
     if disp:
         for pan in pans:
@@ -94,16 +95,16 @@ def panoids(lat, lon, closest=False, disp=False):
     dates = [list(d) for d in dates]
 
     # Make sure the month value is between 1-12
-    dates = [d for d in dates if int(d[2]) <= 12 and int(d[2])>=1]
+    dates = [d for d in dates if int(d[2]) <= 12 and int(d[2]) >= 1]
 
     # Make the first value of the dates the index
     if len(dates) > 0 and dates[-1][0] == '':
         dates[-1][0] = '0'
-    dates = [[int(v) for v in d] for d in dates] # Convert all values to integers
+    dates = [[int(v) for v in d] for d in dates]  # Convert all values to integers
 
     # Merge the dates into the panorama dictionaries
     for i, year, month in dates:
-    	pans[i].update({'year': year, "month": month})
+        pans[i].update({'year': year, "month": month})
 
     # Sort the pans array
     def func(x):
@@ -129,12 +130,11 @@ def tiles_info(panoid):
     image_url = "http://cbk0.google.com/cbk?output=tile&panoid={0:}&zoom=5&x={1:}&y={2:}"
 
     # The tiles positions
-    coord = list(itertools.product(range(26),range(13)))
+    coord = list(itertools.product(range(26), range(13)))
 
-    tiles = [(x, y, "%s_%dx%d.jpg" % (panoid, x, y), image_url.format(panoid, x, y)) for x,y in coord]
+    tiles = [(x, y, "%s_%dx%d.jpg" % (panoid, x, y), image_url.format(panoid, x, y)) for x, y in coord]
 
     return tiles
-
 
 
 def download_tiles(tiles, directory, disp=False):
@@ -196,8 +196,6 @@ def delete_tiles(tiles, directory):
         os.remove(directory + "/" + fname)
 
 
-
-
 def api_download(panoid, heading, flat_dir, key, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=2017):
     """
@@ -245,8 +243,7 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
     return filename
     
 
-
 def download_flats(panoid, flat_dir, key, width=400, height=300,
-                 fov=120, pitch=0, extension='jpg', year=2017):
+                   fov=120, pitch=0, extension='jpg', year=2017):
     for heading in [0, 90, 180, 270]:
         api_download(panoid, heading, flat_dir, key, width, height, fov, pitch, extension, year)
