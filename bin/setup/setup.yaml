@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  tasks:
+
+  - include: make-virtualenv.yaml env_name=streetview

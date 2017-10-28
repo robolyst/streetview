@@ -1,0 +1,49 @@
+---
+
+- stat: path=~/.zshrc
+  register: zshrc_file
+
+- stat: path=~/.virtualenvs/{{ env_name }}
+  register: venv_path
+
+- name: Find out root path
+  shell: pwd
+  register: root_path
+
+- name: install virtualenv
+  pip: name=virtualenv
+  # become: True
+  # become_method: sudo
+
+- name: install virtualenvwrapper
+  pip: name=virtualenvwrapper
+  # become: True
+  # become_method: sudo
+
+- name: add virtualenvwrapper to zsh startup file
+  when: zshrc_file.stat.exists == True
+  blockinfile:
+    dest: ~/.zshrc
+    marker: "# {mark} virtualenvwrapper ANSIBLE MANAGED BLOCK ###############"
+    content: |
+      export WORKON_HOME=$HOME/.virtualenvs
+      source /usr/local/bin/virtualenvwrapper.sh
+
+- name: add virtualenvwrapper to .profile file
+  blockinfile:
+    dest: ~/.profile
+    create: yes
+    marker: "# {mark} virtualenvwrapper ANSIBLE MANAGED BLOCK ###############"
+    content: |
+      export WORKON_HOME=$HOME/.virtualenvs
+      source /usr/local/bin/virtualenvwrapper.sh
+
+- name: create a virtual environment for the projects
+  when: venv_path.stat.exists == False
+  shell: . ~/.profile && mkvirtualenv {{ env_name }}
+
+- name: set the directory for the virtual environment
+  lineinfile:
+    dest: ~/.virtualenvs/{{ env_name }}/bin/postactivate
+    # line: cd {{ root_path.stdout }}
+    line: cd {{ playbook_dir }}/../../
