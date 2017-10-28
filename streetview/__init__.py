@@ -45,16 +45,16 @@ def _panoids_url(lat, lon):
     return url.format(lat, lon)
 
 
-def _panoids_data(lat, lon):
+def _panoids_data(lat, lon, proxies=None):
     """
     Gets the response of the script on Google's servers that returns the
     closest panoramas (ids) to a give GPS coordinate.
     """
     url = _panoids_url(lat, lon)
-    return requests.get(url)
+    return requests.get(url, proxies=None)
 
 
-def panoids(lat, lon, closest=False, disp=False):
+def panoids(lat, lon, closest=False, disp=False, proxies=None):
     """
     Gets the closest panoramas (ids) to the GPS coordinates.
     If the 'closest' boolean parameter is set to true, only the closest panorama
