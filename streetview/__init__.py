@@ -94,20 +94,21 @@ def panoids(lat, lon, closest=False, disp=False):
     dates = re.findall('([0-9]?[0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
     dates = [list(d)[1:] for d in dates]  # Convert to lists and drop the index
 
-    # Convert all values to integers
-    dates = [[int(v) for v in d] for d in dates]
+    if len(dates) > 0:
+        # Convert all values to integers
+        dates = [[int(v) for v in d] for d in dates]
 
-    # Make sure the month value is between 1-12
-    dates = [d for d in dates if d[1] <= 12 and d[1] >= 1]
+        # Make sure the month value is between 1-12
+        dates = [d for d in dates if d[1] <= 12 and d[1] >= 1]
 
-    # The last date belongs to the first panorama
-    year, month = dates.pop(-1)
-    pans[0].update({'year': year, "month": month})
+        # The last date belongs to the first panorama
+        year, month = dates.pop(-1)
+        pans[0].update({'year': year, "month": month})
 
-    # The dates then apply in reverse order to the bottom panoramas
-    dates.reverse()
-    for i, (year, month) in enumerate(dates):
-        pans[-1-i].update({'year': year, "month": month})
+        # The dates then apply in reverse order to the bottom panoramas
+        dates.reverse()
+        for i, (year, month) in enumerate(dates):
+            pans[-1-i].update({'year': year, "month": month})
 
     # # Make the first value of the dates the index
     # if len(dates) > 0 and dates[-1][0] == '':
