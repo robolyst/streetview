@@ -80,6 +80,9 @@ def panoids(lat, lon, closest=False, disp=False):
         "lat": float(p[1]),
         "lon": float(p[2])} for p in pans]  # Convert to floats
 
+    # Remove duplicate panoramas
+    pans = [p for i, p in enumerate(pans) if p not in pans[:i]]
+
     if disp:
         for pan in pans:
             print(pan)
@@ -87,24 +90,33 @@ def panoids(lat, lon, closest=False, disp=False):
     # Get all the dates
     # The dates seem to be at the end of the file. They have a strange format but
     # are in the same order as the panoids except that the latest date is last
-    # instead of first. They also appear to have the index of the panorama before
-    # them. However, the last date (which corresponds to the first/main panorama
-    # doesn't have an index before it. The following regex just picks out all
-    # values that looks like dates and the preceeding index.
+    # instead of first.
     dates = re.findall('([0-9]?[0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
-    dates = [list(d) for d in dates]
+    dates = [list(d)[1:] for d in dates]  # Convert to lists and drop the index
+
+    # Convert all values to integers
+    dates = [[int(v) for v in d] for d in dates]
 
     # Make sure the month value is between 1-12
-    dates = [d for d in dates if int(d[2]) <= 12 and int(d[2]) >= 1]
+    dates = [d for d in dates if d[1] <= 12 and d[1] >= 1]
 
-    # Make the first value of the dates the index
-    if len(dates) > 0 and dates[-1][0] == '':
-        dates[-1][0] = '0'
-    dates = [[int(v) for v in d] for d in dates]  # Convert all values to integers
+    # The last date belongs to the first panorama
+    year, month = dates.pop(-1)
+    pans[0].update({'year': year, "month": month})
 
-    # Merge the dates into the panorama dictionaries
-    for i, year, month in dates:
-        pans[i].update({'year': year, "month": month})
+    # The dates then apply in reverse order to the bottom panoramas
+    dates.reverse()
+    for i, (year, month) in enumerate(dates):
+        pans[-1-i].update({'year': year, "month": month})
+
+    # # Make the first value of the dates the index
+    # if len(dates) > 0 and dates[-1][0] == '':
+    #     dates[-1][0] = '0'
+    # dates = [[int(v) for v in d] for d in dates]  # Convert all values to integers
+    #
+    # # Merge the dates into the panorama dictionaries
+    # for i, year, month in dates:
+    #     pans[i].update({'year': year, "month": month})
 
     # Sort the pans array
     def func(x):
@@ -113,7 +125,7 @@ def panoids(lat, lon, closest=False, disp=False):
         else:
             return datetime(year=3000, month=1, day=1)
     pans.sort(key=func)
-    
+
     if closest:
         return [pans[i] for i in range(len(dates))]
     else:
@@ -241,7 +253,7 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
         filename = None
     del response
     return filename
-    
+
 
 def download_flats(panoid, flat_dir, key, width=400, height=300,
                    fov=120, pitch=0, extension='jpg', year=2017):
