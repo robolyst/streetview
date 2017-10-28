@@ -12,21 +12,12 @@ Street View.
 public use. Therefore, this hack may break if Google makes changes to how
 Street View works.*
 
-Dependencies
+Install
 ------------
-Requests:
 
-	sudo pip install requests
+Install from pip with:
 
-Python Imaging Library:
-
-	sudo apt-get install python-PIL
-
-or
-
-	sudo pip install pillow
-
-
+	pip install git+https://github.com/robolyst/streetview
 
 Quick start
 ------------
