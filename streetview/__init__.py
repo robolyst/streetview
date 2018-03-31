@@ -210,7 +210,7 @@ def delete_tiles(tiles, directory):
 
 
 def api_download(panoid, heading, flat_dir, key, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=2017):
+                 fov=120, pitch=0, extension='jpg', year=2017, fname=None):
     """
     Download an image using the official API. These are not panoramas.
 
@@ -226,11 +226,12 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
         :height: downloaded image height (max 640 for non-premium downloads).
         :fov: image field-of-view.
         :image_format: desired image format.
+        :fname: file name
 
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
-
-    fname = "%s_%s_%s" % (year, panoid, str(heading))
+    if not fname:
+        fname = "%s_%s_%s" % (year, panoid, str(heading))
     image_format = extension if extension != 'jpg' else 'jpeg'
 
     url = "https://maps.googleapis.com/maps/api/streetview"
