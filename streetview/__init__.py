@@ -74,11 +74,16 @@ def panoids(lat, lon, closest=False, disp=False, proxies=None):
     # 2012
     # 2013
     # 2014
-    pans = re.findall('\[[0-9]+,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)', resp.text)
+    pans = re.findall('\[2,"(.+?)"\].+?'
+                      '\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)\],'
+                      '\[-?[0-9]+.[0-9]+\],\[(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)', resp.text)
     pans = [{
         "panoid": p[0],
         "lat": float(p[1]),
-        "lon": float(p[2])} for p in pans]  # Convert to floats
+        "lon": float(p[2]),
+        "heading": float(p[3]),
+        "tilt": float(p[4]),
+        "roll": float(p[5])} for p in pans] # Convert to floats
 
     # Remove duplicate panoramas
     pans = [p for i, p in enumerate(pans) if p not in pans[:i]]
@@ -110,14 +115,6 @@ def panoids(lat, lon, closest=False, disp=False, proxies=None):
         for i, (year, month) in enumerate(dates):
             pans[-1-i].update({'year': year, "month": month})
 
-    # # Make the first value of the dates the index
-    # if len(dates) > 0 and dates[-1][0] == '':
-    #     dates[-1][0] = '0'
-    # dates = [[int(v) for v in d] for d in dates]  # Convert all values to integers
-    #
-    # # Merge the dates into the panorama dictionaries
-    # for i, year, month in dates:
-    #     pans[i].update({'year': year, "month": month})
 
     # Sort the pans array
     def func(x):
@@ -177,10 +174,26 @@ def download_tiles(tiles, directory, disp=False):
             shutil.copyfileobj(response.raw, out_file)
         del response
 
+def roll(image, delta):
+    "Roll an image sideways"
 
-def stich_tiles(panoid, tiles, directory, final_directory):
+    xsize, ysize = image.size
+
+    delta = delta % xsize
+    if delta == 0: return image
+
+    part1 = image.crop((0, 0, delta, ysize))
+    part2 = image.crop((delta, 0, xsize, ysize))
+    part1.load()
+    part2.load()
+    image.paste(part2, (0, 0, xsize-delta, ysize))
+    image.paste(part1, (xsize-delta, 0, xsize, ysize))
+
+    return image
+
+def stitch_tiles(panoid, tiles, directory, final_directory):
     """
-    Stiches all the tiles of a panorama together. The tiles are located in
+    Stitches all the tiles of a panorama together. The tiles are located in
     `directory'.
     """
 
@@ -202,6 +215,7 @@ def stich_tiles(panoid, tiles, directory, final_directory):
 
     panorama.save(final_directory + ("/%s.jpg" % panoid))
     del panorama
+    return final_directory + ("/%s.jpg" % panoid)
 
 
 def delete_tiles(tiles, directory):
@@ -261,3 +275,18 @@ def download_flats(panoid, flat_dir, key, width=400, height=300,
                    fov=120, pitch=0, extension='jpg', year=2017):
     for heading in [0, 90, 180, 270]:
         api_download(panoid, heading, flat_dir, key, width, height, fov, pitch, extension, year)
+
+
+def download_panorama(panoid,  output_dir, tile_dir=None, disp=False):
+    if tile_dir is None:
+        tile_dir = tempfile.mkdtemp()
+
+    assert os.path.isdir(os.path.expanduser(output_dir))
+
+    tiles = tiles_info(panoid)
+    download_tiles(tiles, tile_dir, disp=disp)
+    fn = stich_tiles(panoid, tiles, tile_dir, output_dir)
+
+
+
+
