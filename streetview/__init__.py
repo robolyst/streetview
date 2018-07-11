@@ -34,7 +34,7 @@ import itertools
 from PIL import Image
 from io import BytesIO
 import os
-
+import tempfile
 
 def _panoids_url(lat, lon):
     """
