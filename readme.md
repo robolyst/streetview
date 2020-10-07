@@ -73,6 +73,21 @@ function:
 
 	streetview.api_download(panoid, heading, flat_dir, key)
 
+Params
+------
+
+*panoid*: the panorama id <br>
+*heading*: the heading of the photo. Each photo is taken with a 360
+    camera. You need to specify a direction in degrees as the photo
+    will only cover a partial region of the panorama. The recommended
+    headings to use are 0, 90, 180, or 270. <br>
+*flat_dir*: the directory to save the image to (eg, C:\Users\Example\Documents). <br>
+*key*: your API key. <br>
+*width*: downloaded image width (max 640 for non-premium downloads). <br>
+*height*: downloaded image height (max 640 for non-premium downloads). <br>
+*fov*: image field-of-view. <br>
+*image_format*: desired image format. <br>
+*fname*: file name <br>
 
 Documentation
 -------------
