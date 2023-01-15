@@ -140,7 +140,7 @@ def tiles_info(panoid):
     The format is (x, y, filename, fileurl)
     """
 
-    image_url = "http://cbk0.google.com/cbk?output=tile&panoid={0:}&zoom=5&x={1:}&y={2:}"
+    image_url = "https://cbk0.google.com/cbk?output=tile&panoid={0:}&zoom=5&x={1:}&y={2:}"
 
     # The tiles positions
     coord = list(itertools.product(range(26), range(13)))
