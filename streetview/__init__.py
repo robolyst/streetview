@@ -223,7 +223,7 @@ def api_download(
             camera. You need to specify a direction in degrees as the photo
             will only cover a partial region of the panorama. The recommended
             headings to use are 0, 90, 180, or 270.
-        :flat_dir: the direction to save the image to.
+        :flat_dir: the directory to save the image to (eg, C:\Users\SUNNY\Documents).
         :key: your API key.
         :width: downloaded image width (max 640 for non-premium downloads).
         :height: downloaded image height (max 640 for non-premium downloads).
