@@ -1,6 +1,8 @@
 name: Build and publish to PyPI
 
-on: [release]
+on:
+  release:
+    types: [published]
 
 
 jobs:
