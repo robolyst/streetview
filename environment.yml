@@ -21,3 +21,5 @@ dependencies:
   - mypy==1.2.0
   - types-requests
   - types-Pillow
+  - build
+  - twine

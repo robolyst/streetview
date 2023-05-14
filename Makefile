@@ -47,6 +47,7 @@ clean:  ## Delete unnecessary files from the project
 	rm -rf .pytest_cache
 	rm -rf .coverage
 	rm -rf .mypy_cache
+	rm -rf dist
 	find . -name __pycache__ | xargs rm -rf
 
 check: $(DEPS)  ## Code style checks (isort, flake8 and mypy)
@@ -65,3 +66,7 @@ test: $(DEPS)  ## Run tests
 		--no-cov-on-fail \
 		--cov-fail-under=$(COVERAGE) \
 		--cov-report term-missing
+
+build: $(DEPS)  ## Build the package
+	$(PYTHON_CMD) -m build
+	$(PYTHON_CMD) -m twine check --strict dist/*

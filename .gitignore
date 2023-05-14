@@ -17,3 +17,4 @@ docs/_build/
 .env
 *.jpg
 .DS_Store
+dist/
