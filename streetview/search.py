@@ -11,7 +11,7 @@ class Panorama(BaseModel):
     lat: float
     lon: float
     heading: float
-    tilt: float
+    pitch: float
     roll: float
     date: str | None
 
@@ -78,7 +78,7 @@ def extract_panoramas(text: str) -> list[Panorama]:
             lat=pano[2][0][2],
             lon=pano[2][0][3],
             heading=pano[2][2][0],
-            tilt=pano[2][2][1],
+            pitch=pano[2][2][1],
             roll=pano[2][2][2],
             date=dates[i] if i < len(dates) else None,
         )

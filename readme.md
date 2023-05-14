@@ -33,7 +33,7 @@ panos = search_panoramas(lat=41.8982208, lon=12.4764804)
 first = panos[0]
 
 print(first)
-# pano_id='_R1mwpMkiqa2p0zp48EBJg' lat=41.89820676786453 lon=12.47644220919742 heading=0.8815613985061646 tilt=89.001953125 roll=0.1744659692049026 date='2019-08'
+# pano_id='_R1mwpMkiqa2p0zp48EBJg' lat=41.89820676786453 lon=12.47644220919742 heading=0.8815613985061646 pitch=89.001953125 roll=0.1744659692049026 date='2019-08'
 ```
 
 ## Get Metadata
