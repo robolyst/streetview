@@ -3,7 +3,7 @@ name: Python package
 on: [push]
 
 jobs:
-  build:
+  run_unit_tests:
 
     runs-on: ubuntu-latest
 
