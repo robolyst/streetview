@@ -1,67 +1,73 @@
-# -*- coding: utf-8 -*-
-"""
-:Module: ``streetview``
-:Author: `Adrian Letchford <http://www.dradrian.com>`_
-:Organisation: `Warwick Business School <http://www.wbs.ac.uk/>`_, `University of Warwick <http://www.warwick.ac.uk/>`_.
-
-
-This is a light module for downloading photos from Google street view. The
-functions allow you to retrieve current and **old** photos.
-
-The photos on Google street view are panoramas and are refered to as such.
-However, you have the option of downloading flat photos, or panoramas.
-
-Retrieving photos is a two step process. First, you must translate GPS
-coordinates into panorama ids. The following code retrieves a list of
-the closest panoramas giving you their id and date:
-
->>> import streetview
->>> panoids = streetview.panoids(lat, lon)
-
-You can then use the panorama ids to download photos with the following
-function:
-
->>> streetview.api_download(panoid, heading, flat_dir, key)
-
-"""
-
-import re
-from datetime import datetime
-import requests
-import time
-import shutil
 import itertools
-from PIL import Image
-from io import BytesIO
 import os
+import re
+import shutil
+import time
+from dataclasses import dataclass
+from io import BytesIO
+from typing import Any, Callable
+
+import requests
+from PIL import Image
+from requests.models import Response
 
 
-def _panoids_url(lat, lon):
+def make_panoids_url(lat: float, lon: float) -> str:
     """
     Builds the URL of the script on Google's servers that returns the closest
     panoramas (ids) to a give GPS coordinate.
     """
-    url = "https://maps.googleapis.com/maps/api/js/GeoPhotoService.SingleImageSearch?pb=!1m5!1sapiv3!5sUS!11m2!1m1!1b0!2m4!1m2!3d{0:}!4d{1:}!2d50!3m10!2m2!1sen!2sGB!9m1!1e2!11m4!1m3!1e2!2b1!3e2!4m10!1e1!1e2!1e3!1e4!1e8!1e6!5m1!1e2!6m1!1e2&callback=_xdc_._v2mub5"
+    url = (
+        "https://maps.googleapis.com/maps/api/js/"
+        "GeoPhotoService.SingleImageSearch"
+        "?pb=!1m5!1sapiv3!5sUS!11m2!1m1!1b0!2m4!1m2!3d{0:}!4d{1:}!2d50!3m10"
+        "!2m2!1sen!2sGB!9m1!1e2!11m4!1m3!1e2!2b1!3e2!4m10!1e1!1e2!1e3!1e4"
+        "!1e8!1e6!5m1!1e2!6m1!1e2"
+        "&callback=_xdc_._v2mub5"
+    )
     return url.format(lat, lon)
 
 
-def _panoids_data(lat, lon, proxies=None):
+def panoids_request(lat: float, lon: float) -> Response:
     """
     Gets the response of the script on Google's servers that returns the
     closest panoramas (ids) to a give GPS coordinate.
     """
-    url = _panoids_url(lat, lon)
-    return requests.get(url, proxies=None)
+    url = make_panoids_url(lat, lon)
+    return requests.get(url)
 
 
-def panoids(lat, lon, closest=False, disp=False, proxies=None):
+def extract_panoids(text: str) -> list[dict[str, Any]]:
+    """
+    Given a valid response from the panoids endpoint, return a list of all the
+    panoids.
+    """
+
+    pattern = r'\[[0-9]+,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)'
+
+    pans = re.findall(pattern, text)
+    pans = [
+        {
+            "panoid": p[0],
+            "lat": float(p[1]),
+            "lon": float(p[2]),
+        }
+        for p in pans
+    ]
+    return pans
+
+
+def drop_duplicates(items: list[Any], key: Callable[[Any], str]) -> list[Any]:
+    keys = [key(item) for item in items]
+    return [item for i, item in enumerate(items) if key(item) not in keys[:i]]
+
+
+def panoids(lat: float, lon: float) -> list[dict[str, Any]]:
     """
     Gets the closest panoramas (ids) to the GPS coordinates.
-    If the 'closest' boolean parameter is set to true, only the closest panorama
-    will be gotten (at all the available dates)
     """
 
-    resp = _panoids_data(lat, lon)
+    resp = panoids_request(lat, lon)
 
     # Get all the panorama ids and coordinates
     # I think the latest panorama should be the first one. And the previous
@@ -74,24 +80,14 @@ def panoids(lat, lon, closest=False, disp=False, proxies=None):
     # 2012
     # 2013
     # 2014
-    pans = re.findall('\[[0-9]+,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)', resp.text)
-    pans = [{
-        "panoid": p[0],
-        "lat": float(p[1]),
-        "lon": float(p[2])} for p in pans]  # Convert to floats
-
-    # Remove duplicate panoramas
-    pans = [p for i, p in enumerate(pans) if p not in pans[:i]]
-
-    if disp:
-        for pan in pans:
-            print(pan)
+    pans = extract_panoids(resp.text)
+    pans = drop_duplicates(pans, key=lambda p: str(p["panoid"]))
 
     # Get all the dates
     # The dates seem to be at the end of the file. They have a strange format but
     # are in the same order as the panoids except that the latest date is last
     # instead of first.
-    dates = re.findall('([0-9]?[0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]', resp.text)
+    dates = re.findall(r"([0-9]?[0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]", resp.text)
     dates = [list(d)[1:] for d in dates]  # Convert to lists and drop the index
 
     if len(dates) > 0:
@@ -103,54 +99,52 @@ def panoids(lat, lon, closest=False, disp=False, proxies=None):
 
         # The last date belongs to the first panorama
         year, month = dates.pop(-1)
-        pans[0].update({'year': year, "month": month})
+        pans[0].update({"year": year, "month": month})
 
         # The dates then apply in reverse order to the bottom panoramas
         dates.reverse()
         for i, (year, month) in enumerate(dates):
-            pans[-1-i].update({'year': year, "month": month})
+            pans[-1 - i].update({"year": year, "month": month})
 
-    # # Make the first value of the dates the index
-    # if len(dates) > 0 and dates[-1][0] == '':
-    #     dates[-1][0] = '0'
-    # dates = [[int(v) for v in d] for d in dates]  # Convert all values to integers
-    #
-    # # Merge the dates into the panorama dictionaries
-    # for i, year, month in dates:
-    #     pans[i].update({'year': year, "month": month})
-
-    # Sort the pans array
-    def func(x):
-        if 'year'in x:
-            return datetime(year=x['year'], month=x['month'], day=1)
-        else:
-            return datetime(year=3000, month=1, day=1)
-    pans.sort(key=func)
-
-    if closest:
-        return [pans[i] for i in range(len(dates))]
-    else:
-        return pans
+    return pans
 
 
-def tiles_info(panoid):
+@dataclass
+class Tile:
+    x: int
+    y: int
+    filename: str
+    fileurl: str
+
+
+def tiles_info(panoid: str) -> list[Tile]:
     """
     Generate a list of a panorama's tiles and their position.
 
     The format is (x, y, filename, fileurl)
     """
 
-    image_url = "https://cbk0.google.com/cbk?output=tile&panoid={0:}&zoom=5&x={1:}&y={2:}"
+    image_url = (
+        "https://cbk0.google.com/cbk?output=tile&panoid={0:}&zoom=5&x={1:}&y={2:}"
+    )
 
     # The tiles positions
     coord = list(itertools.product(range(26), range(13)))
 
-    tiles = [(x, y, "%s_%dx%d.jpg" % (panoid, x, y), image_url.format(panoid, x, y)) for x, y in coord]
+    tiles = [
+        Tile(
+            x=x,
+            y=y,
+            filename="%s_%dx%d.jpg" % (panoid, x, y),
+            fileurl=image_url.format(panoid, x, y),
+        )
+        for x, y in coord
+    ]
 
     return tiles
 
 
-def download_tiles(tiles, directory, disp=False):
+def download_tiles(tiles: list[Tile], directory: str, disp: bool = False) -> None:
     """
     Downloads all the tiles in a Google Stree View panorama into a directory.
 
@@ -159,26 +153,27 @@ def download_tiles(tiles, directory, disp=False):
         directory - the directory to dump the tiles to.
     """
 
-    for i, (x, y, fname, url) in enumerate(tiles):
-
+    for i, tile in enumerate(tiles):
         if disp and i % 20 == 0:
             print("Image %d (%d)" % (i, len(tiles)))
 
         # Try to download the image file
         while True:
             try:
-                response = requests.get(url, stream=True)
+                response = requests.get(tile.fileurl, stream=True)
                 break
             except requests.ConnectionError:
                 print("Connection error. Trying again in 2 seconds.")
                 time.sleep(2)
 
-        with open(directory + '/' + fname, 'wb') as out_file:
+        with open(directory + "/" + tile.filename, "wb") as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
 
 
-def stich_tiles(panoid, tiles, directory, final_directory):
+def stich_tiles(
+    panoid: str, tiles: list[Tile], directory: str, final_directory: str
+) -> None:
     """
     Stiches all the tiles of a panorama together. The tiles are located in
     `directory'.
@@ -187,30 +182,38 @@ def stich_tiles(panoid, tiles, directory, final_directory):
     tile_width = 512
     tile_height = 512
 
-    panorama = Image.new('RGB', (26*tile_width, 13*tile_height))
+    panorama = Image.new("RGB", (26 * tile_width, 13 * tile_height))
 
-    for x, y, fname, url in tiles:
+    for tile in tiles:
+        fname = directory + "/" + tile.filename
+        img = Image.open(fname)
 
-        fname = directory + "/" + fname
-        tile = Image.open(fname)
+        panorama.paste(im=img, box=(tile.x * tile_width, tile.y * tile_height))
 
-        panorama.paste(im=tile, box=(x*tile_width, y*tile_height))
-
-        del tile
-
-#        print fname
+        del img
 
     panorama.save(final_directory + ("/%s.jpg" % panoid))
     del panorama
 
 
-def delete_tiles(tiles, directory):
-    for x, y, fname, url in tiles:
-        os.remove(directory + "/" + fname)
+def delete_tiles(tiles: list[Tile], directory: str) -> None:
+    for tile in tiles:
+        os.remove(directory + "/" + tile.filename)
 
 
-def api_download(panoid, heading, flat_dir, key, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=2017, fname=None):
+def api_download(
+    panoid: str,
+    heading: int,
+    flat_dir: str,
+    key: str,
+    width: int = 640,
+    height: int = 640,
+    fov: int = 120,
+    pitch: int = 0,
+    extension: str = "jpg",
+    year: int = 2017,
+    fname: str | None = None,
+) -> str | None:
     """
     Download an image using the official API. These are not panoramas.
 
@@ -228,36 +231,49 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
         :image_format: desired image format.
         :fname: file name
 
-    You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
+    You can find instructions to obtain an API key here:
+    https://developers.google.com/maps/documentation/streetview/
     """
     if not fname:
         fname = "%s_%s_%s" % (year, panoid, str(heading))
-    image_format = extension if extension != 'jpg' else 'jpeg'
+    image_format = extension if extension != "jpg" else "jpeg"
 
     url = "https://maps.googleapis.com/maps/api/streetview"
-    params = {
+    params: dict[str, str | int] = {
         # maximum permitted size for free calls
         "size": "%dx%d" % (width, height),
         "fov": fov,
         "pitch": pitch,
         "heading": heading,
         "pano": panoid,
-        "key": key
+        "key": key,
     }
 
     response = requests.get(url, params=params, stream=True)
     try:
         img = Image.open(BytesIO(response.content))
-        filename = '%s/%s.%s' % (flat_dir, fname, extension)
+        filename = "%s/%s.%s" % (flat_dir, fname, extension)
         img.save(filename, image_format)
-    except:
+    except Exception:
         print("Image not found")
         filename = None
     del response
+
     return filename
 
 
-def download_flats(panoid, flat_dir, key, width=400, height=300,
-                   fov=120, pitch=0, extension='jpg', year=2017):
+def download_flats(
+    panoid: str,
+    flat_dir: str,
+    key: str,
+    width: int = 400,
+    height: int = 300,
+    fov: int = 120,
+    pitch: int = 0,
+    extension: str = "jpg",
+    year: int = 2017,
+) -> None:
     for heading in [0, 90, 180, 270]:
-        api_download(panoid, heading, flat_dir, key, width, height, fov, pitch, extension, year)
+        api_download(
+            panoid, heading, flat_dir, key, width, height, fov, pitch, extension, year
+        )

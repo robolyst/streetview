@@ -1,24 +1,24 @@
 from setuptools import setup
 
+
 def readme():
-    with open('readme.md') as f:
+    with open("readme.md") as f:
         return f.read()
 
+
 setup(
-    name='streetview',
-    version='0.1',
-    description='Retrieve current and historical photos from Google Street View',
+    name="streetview",
+    version="0.1",
+    description="Retrieve current and historical photos from Google Street View",
     long_description=readme(),
-    url='https://github.com/robolyst/streetview',
-    author='Adrian Letchford',
-    author_email='me@dradrian.com',
-    license='MIT',
-    packages=['streetview'],
+    url="https://github.com/robolyst/streetview",
+    author="Adrian Letchford",
+    author_email="me@dradrian.com",
+    license="MIT",
+    packages=["streetview"],
     zip_safe=False,
     install_requires=[
-        'requests',
-        'pillow',
+        "requests",
+        "pillow",
     ],
-    test_suite='nose.collector',
-    tests_require=['nose'],
 )
