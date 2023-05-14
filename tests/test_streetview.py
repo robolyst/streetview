@@ -47,6 +47,9 @@ class TestPanoidsOnSydney:
         for panoid in self.result:
             assert "lon" in panoid
 
+    def test_that_there_are_the_expected_number_of_results(self):
+        assert len(self.result) == 20
+
     def test_that_panoids_are_unique(self):
         panoids = [p["panoid"] for p in self.result]
         uniques = list(dict.fromkeys(panoids))
@@ -61,3 +64,13 @@ class TestPanoidsOnSydney:
             "month": 5,
         }
         assert any([p == panoid for p in self.result])
+
+
+# def test_():
+#     resp = streetview.panoids_request(**SYDNEY)
+#     result = streetview.extract_panoids(resp.text)
+
+#     for p in result:
+#         print(p['panoid'])
+
+#     assert False

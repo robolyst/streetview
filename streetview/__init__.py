@@ -8,9 +8,10 @@ from io import BytesIO
 
 import requests
 from PIL import Image
+from requests.models import Response
 
 
-def make_panoids_url(lat, lon):
+def make_panoids_url(lat: float, lon: float) -> str:
     """
     Builds the URL of the script on Google's servers that returns the closest
     panoramas (ids) to a give GPS coordinate.
@@ -19,7 +20,7 @@ def make_panoids_url(lat, lon):
     return url.format(lat, lon)
 
 
-def panoids_request(lat, lon):
+def panoids_request(lat: float, lon: float) -> Response:
     """
     Gets the response of the script on Google's servers that returns the
     closest panoramas (ids) to a give GPS coordinate.
@@ -28,11 +29,36 @@ def panoids_request(lat, lon):
     return requests.get(url)
 
 
+def extract_panoids(text: str) -> list[dict]:
+    """
+    Given a valid response from the panoids endpoint, return a list of all the
+    panoids.
+    """
+
+    pattern = r'\[[0-9]+,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)'
+
+    pans = re.findall(pattern, text)
+    pans = [
+        {
+            "panoid": p[0],
+            "lat": float(p[1]),
+            "lon": float(p[2]),
+        }
+        for p in pans
+    ]
+    return pans
+
+
+def drop_duplicates(items, key):
+    keys = [key(item) for item in items]
+    return [
+        item for i, item in enumerate(items) if key(item) not in keys[:i]
+    ]
+
+
 def panoids(lat, lon):
     """
     Gets the closest panoramas (ids) to the GPS coordinates.
-    If the 'closest' boolean parameter is set to true, only the closest panorama
-    will be gotten (at all the available dates)
     """
 
     resp = panoids_request(lat, lon)
@@ -48,16 +74,8 @@ def panoids(lat, lon):
     # 2012
     # 2013
     # 2014
-    pans = re.findall(
-        r'\[[0-9]+,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)',
-        resp.text,
-    )
-    pans = [
-        {"panoid": p[0], "lat": float(p[1]), "lon": float(p[2])} for p in pans
-    ]  # Convert to floats
-
-    # Remove duplicate panoramas
-    pans = [p for i, p in enumerate(pans) if p not in pans[:i]]
+    pans = extract_panoids(resp.text)
+    pans = drop_duplicates(pans, key=lambda p: p['panoid'])
 
     # Get all the dates
     # The dates seem to be at the end of the file. They have a strange format but
