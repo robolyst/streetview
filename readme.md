@@ -27,7 +27,7 @@ coordinates into panorama IDs. The following code retrieves a list of
 the closest panoramas.
 
 	import streetview
-	panoids = streetview.panoids(lat=-33.85693857571269, lon=151.2144895142714)
+	panoids = streetview.get_panoramas(lat=-33.85693857571269, lon=151.2144895142714)
 
 The list contains their ID, exact coordinates, and the year and month the photo
 was taken if known:
@@ -75,13 +75,10 @@ function:
 
 # Development
 
-To setup the development environment run:
-```bash
-make deps
-```
-this will install mamba and the required Python packages into a local env.
-
 Run tests with:
 ```bash
 make test
 ```
+this will install mamba and the required Python packages into a local env.
+
+If you want to rebuild VCR cassettes, you will need to copy `.env-example` to `.env` and add your Google Maps API Key.

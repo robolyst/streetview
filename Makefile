@@ -1,3 +1,8 @@
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 SHELL := $(shell which bash)
 MICROMAMBA := $(PWD)/.micromamba
 MAMBA := $(MICROMAMBA)/micromamba
@@ -52,7 +57,7 @@ format: $(DEPS)  ## Run auto linting
 	$(PYTHON_CMD) -m black .
 
 test: $(DEPS)  ## Run tests
-	$(PYTHON_CMD) -m pytest \
+	- $(PYTHON_CMD) -m pytest \
 		--cov=$(PROJECT) \
 		--no-cov-on-fail \
 		--cov-fail-under=$(COVERAGE) \

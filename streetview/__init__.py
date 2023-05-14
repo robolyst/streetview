@@ -1,18 +1,40 @@
 import itertools
+import json
 import os
 import re
 import shutil
 import time
 from dataclasses import dataclass
 from io import BytesIO
-from typing import Any, Callable
 
 import requests
 from PIL import Image
+from pydantic import BaseModel
 from requests.models import Response
 
 
-def make_panoids_url(lat: float, lon: float) -> str:
+class Panorama(BaseModel):
+    pano_id: str
+    lat: float
+    lon: float
+    heading: float
+    tilt: float
+    roll: float
+    date: str | None
+
+
+class Location(BaseModel):
+    lat: float
+    lng: float
+
+
+class MetaData(BaseModel):
+    date: str
+    location: Location
+    pano_id: str
+
+
+def make_panoramas_url(lat: float, lon: float) -> str:
     """
     Builds the URL of the script on Google's servers that returns the closest
     panoramas (ids) to a give GPS coordinate.
@@ -23,89 +45,63 @@ def make_panoids_url(lat: float, lon: float) -> str:
         "?pb=!1m5!1sapiv3!5sUS!11m2!1m1!1b0!2m4!1m2!3d{0:}!4d{1:}!2d50!3m10"
         "!2m2!1sen!2sGB!9m1!1e2!11m4!1m3!1e2!2b1!3e2!4m10!1e1!1e2!1e3!1e4"
         "!1e8!1e6!5m1!1e2!6m1!1e2"
-        "&callback=_xdc_._v2mub5"
+        "&callback=callbackfunc"
     )
     return url.format(lat, lon)
 
 
-def panoids_request(lat: float, lon: float) -> Response:
+def panoramas_request(lat: float, lon: float) -> Response:
     """
     Gets the response of the script on Google's servers that returns the
     closest panoramas (ids) to a give GPS coordinate.
     """
-    url = make_panoids_url(lat, lon)
+    url = make_panoramas_url(lat, lon)
     return requests.get(url)
 
 
-def extract_panoids(text: str) -> list[dict[str, Any]]:
+def extract_panoramas(text: str) -> list[Panorama]:
     """
     Given a valid response from the panoids endpoint, return a list of all the
     panoids.
     """
 
-    pattern = r'\[[0-9]+,"(.+?)"\].+?\[\[null,null,(-?[0-9]+.[0-9]+),(-?[0-9]+.[0-9]+)'
+    # The response is actually javascript code. It's a function with a single
+    # input which is a huge deeply nested array of items.
+    blob = re.findall(r"callbackfunc\( (.*) \)$", text)[0]
+    data = json.loads(blob)
 
-    pans = re.findall(pattern, text)
-    pans = [
-        {
-            "panoid": p[0],
-            "lat": float(p[1]),
-            "lon": float(p[2]),
-        }
-        for p in pans
+    raw_panos = data[1][5][0][3][0]
+    raw_dates = data[1][5][0][8]
+
+    # For some reason, dates do not include a date for each panorama.
+    # the n dates match the last n panos. Here we flip the arrays
+    # so that the 0th pano aligns with the 0th date.
+    raw_panos = raw_panos[::-1]
+    raw_dates = raw_dates[::-1]
+
+    dates = [f"{d[1][0]}-{d[1][1]:02d}" for d in raw_dates]
+
+    return [
+        Panorama(
+            pano_id=pano[0][1],
+            lat=pano[2][0][2],
+            lon=pano[2][0][3],
+            heading=pano[2][2][0],
+            tilt=pano[2][2][1],
+            roll=pano[2][2][2],
+            date=dates[i] if i < len(dates) else None,
+        )
+        for i, pano in enumerate(raw_panos)
     ]
-    return pans
 
 
-def drop_duplicates(items: list[Any], key: Callable[[Any], str]) -> list[Any]:
-    keys = [key(item) for item in items]
-    return [item for i, item in enumerate(items) if key(item) not in keys[:i]]
-
-
-def panoids(lat: float, lon: float) -> list[dict[str, Any]]:
+def get_panoramas(lat: float, lon: float) -> list[Panorama]:
     """
     Gets the closest panoramas (ids) to the GPS coordinates.
     """
 
-    resp = panoids_request(lat, lon)
-
-    # Get all the panorama ids and coordinates
-    # I think the latest panorama should be the first one. And the previous
-    # successive ones ought to be in reverse order from bottom to top. The final
-    # images don't seem to correspond to a particular year. So if there is one
-    # image per year I expect them to be orded like:
-    # 2015
-    # XXXX
-    # XXXX
-    # 2012
-    # 2013
-    # 2014
-    pans = extract_panoids(resp.text)
-    pans = drop_duplicates(pans, key=lambda p: str(p["panoid"]))
-
-    # Get all the dates
-    # The dates seem to be at the end of the file. They have a strange format but
-    # are in the same order as the panoids except that the latest date is last
-    # instead of first.
-    dates = re.findall(r"([0-9]?[0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]", resp.text)
-    dates = [list(d)[1:] for d in dates]  # Convert to lists and drop the index
-
-    if len(dates) > 0:
-        # Convert all values to integers
-        dates = [[int(v) for v in d] for d in dates]
-
-        # Make sure the month value is between 1-12
-        dates = [d for d in dates if d[1] <= 12 and d[1] >= 1]
-
-        # The last date belongs to the first panorama
-        year, month = dates.pop(-1)
-        pans[0].update({"year": year, "month": month})
-
-        # The dates then apply in reverse order to the bottom panoramas
-        dates.reverse()
-        for i, (year, month) in enumerate(dates):
-            pans[-1 - i].update({"year": year, "month": month})
-
+    resp = panoramas_request(lat, lon)
+    pans = extract_panoramas(resp.text)
     return pans
 
 
@@ -199,6 +195,23 @@ def stich_tiles(
 def delete_tiles(tiles: list[Tile], directory: str) -> None:
     for tile in tiles:
         os.remove(directory + "/" + tile.filename)
+
+
+def get_pano_metadata(panoid: str, api_key: str) -> MetaData:
+    """
+    Returns a panorama's metadata.
+
+    Quota: This function doesn't use up any quota or charge on your API_KEY.
+
+    Endpoint documented at:
+    https://developers.google.com/maps/documentation/streetview/metadata
+    """
+    url = (
+        "https://maps.googleapis.com/maps/api/streetview/metadata"
+        f"?pano={panoid}&key={api_key}"
+    )
+    resp = requests.get(url)
+    return MetaData(**resp.json())
 
 
 def api_download(
