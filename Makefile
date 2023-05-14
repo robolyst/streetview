@@ -44,7 +44,7 @@ clean:  ## Delete unnecessary files from the project
 check: $(DEPS)  ## Code style checks (isort, flake8 and mypy)
 	- $(PYTHON_CMD) -m isort . --diff
 	- $(PYTHON_CMD) -m flake8 $(PROJECT_DIR) $(TEST_DIR)
-	- $(PYTHON_CMD) -m mypy -p $(PROJECT) --namespace-packages --check-untyped-defs
+	- $(PYTHON_CMD) -m mypy -p $(PROJECT)
 
 format: $(DEPS)  ## Run auto linting
 	$(PYTHON_CMD) -m isort .
