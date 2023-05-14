@@ -1,4 +1,5 @@
 from setuptools import setup
+from version import VERSION
 
 
 def readme():
@@ -8,7 +9,7 @@ def readme():
 
 setup(
     name="streetview",
-    version="0.0.0",
+    version=VERSION,
     description="Retrieve current and historical photos from Google Street View",
     long_description=readme(),
     long_description_content_type="text/markdown",
