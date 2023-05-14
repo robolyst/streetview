@@ -1,10 +1,10 @@
-name: Python package
+name: Style checks and test
 
 on: [push]
 
 jobs:
   run_tests:
-
+    name: Style checks and test
     runs-on: ubuntu-latest
 
     steps:

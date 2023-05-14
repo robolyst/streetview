@@ -15,7 +15,7 @@ Street View works.*
 
 Install from pip with:
 
-	pip install git+https://github.com/robolyst/streetview
+	pip install streetview
 
 # Quick start
 
