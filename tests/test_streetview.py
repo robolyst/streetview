@@ -16,14 +16,14 @@ def get(recieved, expected):
 
 
 @pytest.mark.vcr
-def test_that_panoids_data_returns_200():
-    resp = streetview._panoids_data(**SYDNEY)
+def test_thatpanoids_request_returns_200():
+    resp = streetview.panoids_request(**SYDNEY)
     assert resp.status_code == 200
 
 
 @pytest.mark.vcr
-def test_that_panoids_data_returns_large_payload():
-    resp = streetview._panoids_data(**SYDNEY)
+def test_thatpanoids_request_returns_large_payload():
+    resp = streetview.panoids_request(**SYDNEY)
     assert len(resp.text) > 1000
 
 

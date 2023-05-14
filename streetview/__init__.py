@@ -10,7 +10,7 @@ import requests
 from PIL import Image
 
 
-def _panoids_url(lat, lon):
+def make_panoids_url(lat, lon):
     """
     Builds the URL of the script on Google's servers that returns the closest
     panoramas (ids) to a give GPS coordinate.
@@ -19,23 +19,23 @@ def _panoids_url(lat, lon):
     return url.format(lat, lon)
 
 
-def _panoids_data(lat, lon, proxies=None):
+def panoids_request(lat, lon):
     """
     Gets the response of the script on Google's servers that returns the
     closest panoramas (ids) to a give GPS coordinate.
     """
-    url = _panoids_url(lat, lon)
-    return requests.get(url, proxies=None)
+    url = make_panoids_url(lat, lon)
+    return requests.get(url)
 
 
-def panoids(lat, lon, closest=False, disp=False, proxies=None):
+def panoids(lat, lon):
     """
     Gets the closest panoramas (ids) to the GPS coordinates.
     If the 'closest' boolean parameter is set to true, only the closest panorama
     will be gotten (at all the available dates)
     """
 
-    resp = _panoids_data(lat, lon)
+    resp = panoids_request(lat, lon)
 
     # Get all the panorama ids and coordinates
     # I think the latest panorama should be the first one. And the previous
@@ -58,10 +58,6 @@ def panoids(lat, lon, closest=False, disp=False, proxies=None):
 
     # Remove duplicate panoramas
     pans = [p for i, p in enumerate(pans) if p not in pans[:i]]
-
-    if disp:
-        for pan in pans:
-            print(pan)
 
     # Get all the dates
     # The dates seem to be at the end of the file. They have a strange format but
@@ -104,10 +100,7 @@ def panoids(lat, lon, closest=False, disp=False, proxies=None):
 
     pans.sort(key=func)
 
-    if closest:
-        return [pans[i] for i in range(len(dates))]
-    else:
-        return pans
+    return pans
 
 
 def tiles_info(panoid):
