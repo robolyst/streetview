@@ -47,3 +47,17 @@ class TestPanoidsOnSydney:
         for panoid in self.result:
             assert 'lon' in panoid
 
+    def test_that_panoids_are_unique(self):
+        panoids = [p['panoid'] for p in self.result]
+        uniques = list(dict.fromkeys(panoids))
+        assert len(panoids) == len(uniques)
+
+    def test_that_panoid_exists(self):
+        panoid = {
+            'panoid': 'F1dTjx_cF7_viUk4-3yruA',
+            'lat': -33.87959459151072,
+            'lon': 151.1654857862822,
+            'year': 2014,
+            'month': 5,
+        }
+        assert any([p == panoid for p in self.result])
