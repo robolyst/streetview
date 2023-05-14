@@ -48,6 +48,7 @@ clean:  ## Delete unnecessary files from the project
 	rm -rf .coverage
 	rm -rf .mypy_cache
 	rm -rf dist
+	rm -rf streetview.egg-info
 	find . -name __pycache__ | xargs rm -rf
 
 check: $(DEPS)  ## Code style checks (isort, flake8 and mypy)
