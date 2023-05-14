@@ -9,6 +9,7 @@ dependencies:
   - python=3.11.3
   - requests
   - pillow
+  - pydantic
 
   # Testing dependencies
   - pytest=7.3.1

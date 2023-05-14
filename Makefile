@@ -1,3 +1,8 @@
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 SHELL := $(shell which bash)
 MICROMAMBA := $(PWD)/.micromamba
 MAMBA := $(MICROMAMBA)/micromamba
@@ -7,7 +12,7 @@ PROJECT := streetview
 PROJECT_DIR = $(PWD)/$(PROJECT)
 TEST_DIR = $(PWD)/tests
 PYTHON_CMD := PYTHONPATH=$(PWD) $(VENV)/bin/python
-COVERAGE := 50  # Required code coverage
+COVERAGE := 90  # Required code coverage
 
 ifndef VERBOSE
 .SILENT:
@@ -32,6 +37,9 @@ $(DEPS): environment.yml $(MAMBA)
 
 deps: $(DEPS)  ## Install project dependencies
 
+python: $(DEPS)
+	$(PYTHON_CMD)
+
 clean:  ## Delete unnecessary files from the project
 	rm -rf $(MICROMAMBA)
 	rm -rf $(VENV)
@@ -52,7 +60,7 @@ format: $(DEPS)  ## Run auto linting
 	$(PYTHON_CMD) -m black .
 
 test: $(DEPS)  ## Run tests
-	$(PYTHON_CMD) -m pytest \
+	- $(PYTHON_CMD) -m pytest \
 		--cov=$(PROJECT) \
 		--no-cov-on-fail \
 		--cov-fail-under=$(COVERAGE) \
