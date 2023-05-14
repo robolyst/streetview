@@ -19,15 +19,13 @@ Install from pip with:
 
 # Quick start
 
-
-
 The photos on Google street view are panoramas. Each parnorama has its own
 unique ID. Retrieving photos is a two step process. First, you must translate GPS
 coordinates into panorama IDs. The following code retrieves a list of
 the closest panoramas.
 
 	import streetview
-	panoids = streetview.get_panoramas(lat=-33.85693857571269, lon=151.2144895142714)
+	panos = streetview.search_panoramas(lat=-33.85693857571269, lon=151.2144895142714)
 
 The list contains their ID, exact coordinates, and the year and month the photo
 was taken if known:

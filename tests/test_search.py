@@ -3,6 +3,8 @@ import os
 import pytest
 
 import streetview
+import streetview.api
+import streetview.search
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
 
@@ -19,14 +21,14 @@ BELGRAVIA = {
 
 
 @pytest.mark.vcr
-def test_thatpanoramas_request_returns_200():
-    resp = streetview.panoramas_request(**SYDNEY)
+def test_thatsearch_request_returns_200():
+    resp = streetview.search.search_request(**SYDNEY)
     assert resp.status_code == 200
 
 
 @pytest.mark.vcr
-def test_thatpanoramas_request_returns_large_payload():
-    resp = streetview.panoramas_request(**SYDNEY)
+def test_thatsearch_request_returns_large_payload():
+    resp = streetview.search.search_request(**SYDNEY)
     assert len(resp.text) > 1000
 
 
@@ -47,7 +49,7 @@ class GenericGetPanoidsTest:
         ids = [p.pano_id for p in self.result if p.date is not None]
         dates = [p.date for p in self.result if p.date is not None]
         meta_dates = [
-            streetview.get_pano_metadata(
+            streetview.api.get_pano_metadata(
                 panoid=panoid,
                 api_key=GOOGLE_MAPS_API_KEY,
             ).date
@@ -60,7 +62,7 @@ class GenericGetPanoidsTest:
 @pytest.mark.vcr
 class TestPanoidsOnSydney(GenericGetPanoidsTest):
     def setup_method(self):
-        self.result = streetview.get_panoramas(**SYDNEY)
+        self.result = streetview.search_panoramas(**SYDNEY)
 
     def test_that_there_are_the_expected_number_of_results(self):
         assert len(self.result) == 20
@@ -69,7 +71,7 @@ class TestPanoidsOnSydney(GenericGetPanoidsTest):
 @pytest.mark.vcr
 class TestPanoidsOnBelgravia(GenericGetPanoidsTest):
     def setup_method(self):
-        self.result = streetview.get_panoramas(**BELGRAVIA)
+        self.result = streetview.search_panoramas(**BELGRAVIA)
 
     def test_that_there_are_the_expected_number_of_results(self):
         assert len(self.result) == 43

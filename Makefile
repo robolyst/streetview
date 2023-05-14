@@ -37,6 +37,9 @@ $(DEPS): environment.yml $(MAMBA)
 
 deps: $(DEPS)  ## Install project dependencies
 
+python: $(DEPS)
+	$(PYTHON_CMD)
+
 clean:  ## Delete unnecessary files from the project
 	rm -rf $(MICROMAMBA)
 	rm -rf $(VENV)
