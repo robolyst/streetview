@@ -1,0 +1,49 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.29.0
+    method: GET
+    uri: https://maps.googleapis.com/maps/api/js/GeoPhotoService.SingleImageSearch?pb=!1m5!1sapiv3!5sUS!11m2!1m1!1b0!2m4!1m2!3d28.092432!4d-34.399243!2d50!3m10!2m2!1sen!2sGB!9m1!1e2!11m4!1m3!1e2!2b1!3e2!4m10!1e1!1e2!1e3!1e4!1e8!1e6!5m1!1e2!6m1!1e2&callback=callbackfunc
+  response:
+    body:
+      string: /**/callbackfunc && callbackfunc( [[5,"generic","Search returned no
+        images."]] )
+    headers:
+      Age:
+      - '374'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - public, max-age=600
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '80'
+      Content-Type:
+      - text/javascript; charset=UTF-8
+      Cross-Origin-Resource-Policy:
+      - cross-origin
+      Date:
+      - Sun, 14 May 2023 17:17:04 GMT
+      Expires:
+      - Sun, 14 May 2023 17:27:04 GMT
+      Server:
+      - mafe
+      Server-Timing:
+      - gfet4t7; dur=1
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1

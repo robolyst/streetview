@@ -2,9 +2,8 @@ import os
 
 import pytest
 
-import streetview
-import streetview.api
-import streetview.search
+from streetview import get_panorama_meta, search_panoramas
+from streetview.search import search_request
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
 
@@ -19,16 +18,26 @@ BELGRAVIA = {
     "lon": -0.1570917,
 }
 
+MIDDLE_OF_OCEAN = {
+    "lat": 28.092432,
+    "lon": -34.399243,
+}
+
+TUNIS = {
+    "lat": 36.8032829,
+    "lon": 10.1808486,
+}
+
 
 @pytest.mark.vcr
 def test_thatsearch_request_returns_200():
-    resp = streetview.search.search_request(**SYDNEY)
+    resp = search_request(**SYDNEY)
     assert resp.status_code == 200
 
 
 @pytest.mark.vcr
 def test_thatsearch_request_returns_large_payload():
-    resp = streetview.search.search_request(**SYDNEY)
+    resp = search_request(**SYDNEY)
     assert len(resp.text) > 1000
 
 
@@ -49,11 +58,11 @@ class GenericGetPanoidsTest:
         ids = [p.pano_id for p in self.result if p.date is not None]
         dates = [p.date for p in self.result if p.date is not None]
         meta_dates = [
-            streetview.api.get_pano_metadata(
-                panoid=panoid,
+            get_panorama_meta(
+                pano_id=pano_id,
                 api_key=GOOGLE_MAPS_API_KEY,
             ).date
-            for panoid in ids
+            for pano_id in ids
         ]
 
         assert dates == meta_dates
@@ -62,7 +71,7 @@ class GenericGetPanoidsTest:
 @pytest.mark.vcr
 class TestPanoidsOnSydney(GenericGetPanoidsTest):
     def setup_method(self):
-        self.result = streetview.search_panoramas(**SYDNEY)
+        self.result = search_panoramas(**SYDNEY)
 
     def test_that_there_are_the_expected_number_of_results(self):
         assert len(self.result) == 20
@@ -71,7 +80,40 @@ class TestPanoidsOnSydney(GenericGetPanoidsTest):
 @pytest.mark.vcr
 class TestPanoidsOnBelgravia(GenericGetPanoidsTest):
     def setup_method(self):
-        self.result = streetview.search_panoramas(**BELGRAVIA)
+        self.result = search_panoramas(**BELGRAVIA)
 
     def test_that_there_are_the_expected_number_of_results(self):
         assert len(self.result) == 43
+
+
+@pytest.mark.vcr
+def test_readme_search_example():
+    from streetview import search_panoramas
+
+    panos = search_panoramas(lat=41.8982208, lon=12.4764804)
+    first = panos[0]
+    print(first)
+
+    result = str(first)
+    expected = (
+        "pano_id='_R1mwpMkiqa2p0zp48EBJg'"
+        " lat=41.89820676786453 lon=12.47644220919742"
+        " heading=0.8815613985061646 tilt=89.001953125 roll=0.1744659692049026"
+        " date='2019-08'"
+    )
+
+    assert result == expected
+
+
+@pytest.mark.vcr
+def test_search_where_there_are_no_results():
+    result = search_panoramas(**MIDDLE_OF_OCEAN)
+    assert len(result) == 0
+
+
+@pytest.mark.vcr
+def test_search_where_there_are_no_dates():
+    result = search_panoramas(**TUNIS)
+
+    dates = [p.date for p in result]
+    assert dates == [None] * len(dates)

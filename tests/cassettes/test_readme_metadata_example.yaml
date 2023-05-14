@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate, br
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.29.0
+    method: GET
+    uri: https://maps.googleapis.com/maps/api/streetview/metadata?pano=_R1mwpMkiqa2p0zp48EBJg
+  response:
+    body:
+      string: "{\n   \"copyright\" : \"\\u00a9 Google\",\n   \"date\" : \"2019-08\",\n
+        \  \"location\" : {\n      \"lat\" : 41.89820659475458,\n      \"lng\" : 12.47644649615282\n
+        \  },\n   \"pano_id\" : \"_R1mwpMkiqa2p0zp48EBJg\",\n   \"status\" : \"OK\"\n}\n"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - public, max-age=86400
+      Content-Length:
+      - '210'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Sun, 14 May 2023 17:15:09 GMT
+      Expires:
+      - Mon, 15 May 2023 17:15:09 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Server-Timing:
+      - gfet4t7; dur=32
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1

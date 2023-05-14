@@ -17,59 +17,50 @@ Install from pip with:
 
 	pip install git+https://github.com/robolyst/streetview
 
-# Quick start
+# Quick start
+
+## Search for Panoramas
 
 The photos on Google street view are panoramas. Each parnorama has its own
 unique ID. Retrieving photos is a two step process. First, you must translate GPS
 coordinates into panorama IDs. The following code retrieves a list of
-the closest panoramas.
+the closest panoramas:
 
-	import streetview
-	panos = streetview.search_panoramas(lat=-33.85693857571269, lon=151.2144895142714)
+```python
+from streetview import search_panoramas
 
-The list contains their ID, exact coordinates, and the year and month the photo
-was taken if known:
+panos = search_panoramas(lat=41.8982208, lon=12.4764804)
+first = panos[0]
 
-	[{
-      'lat': -33.8568510378028,
-      'panoid': u'aX3nhhCruYOr-i1vSef13Q',
-      'lon': 151.2145143359253},
-    {
-      'lat': -33.85702709988117,
-      'panoid': u'OH7ReEUauWGKYqUwff4csA',
-      'lon': 151.2144704271479},
-    {
-      'lat': -33.85696902229012,
-      'panoid': u'73qGSwuFKWAAAAQXLB3qpA',
-      'year': 2014,
-      'lon': 151.2143939813708,
-      'month': 6},
-    {
-      'lat': -33.85698122751459,
-      'panoid': u'FE62TMqVMXwAAAQo8C4L6A',
-      'year': 2015,
-      'lon': 151.214408211074,
-      'month': 5},
-    {
-      'lat': -33.85694092862602,
-      'panoid': u'pTWGmeN8LTgAAAQqT_-Ekg',
-      'year': 2015,
-      'lon': 151.2144308896659,
-      'month': 6},
-    {
-      'lat': -33.85693857571269,
-      'panoid': u'pV6jtRc157XZtWpVIR-rtg',
-      'year': 2015,
-      'lon': 151.2144895142714,
-      'month': 12}
-      ]
+print(first)
+# pano_id='_R1mwpMkiqa2p0zp48EBJg' lat=41.89820676786453 lon=12.47644220919742 heading=0.8815613985061646 tilt=89.001953125 roll=0.1744659692049026 date='2019-08'
+```
 
+## Get Metadata
 
-You can then use the panorama ids to download photos with the following
-function:
+Not all panoramas will have a `date` field in the search results. You can fetch a date for any valid panorama from the metadata api:
 
-	streetview.api_download(panoid, heading, flat_dir, key)
+```python
+from streetview import get_panorama_meta
 
+meta = get_panorama_meta(pano_id='_R1mwpMkiqa2p0zp48EBJg', api_key=GOOGLE_MAPS_API_KEY)
+
+print(meta)
+# date='2019-08' location=Location(lat=41.89820659475458, lng=12.47644649615282) pano_id='_R1mwpMkiqa2p0zp48EBJg'
+```
+## Download streetview image
+
+You can then use the panorama ids to download streetview images:
+```python
+from streetview import get_streetview
+
+image = get_streetview(
+    pano_id="z80QZ1_QgCbYwj7RrmlS0Q",
+    api_key=GOOGLE_MAPS_API_KEY,
+)
+
+image.save("image.jpg", "jpeg")
+```
 
 # Development
 
