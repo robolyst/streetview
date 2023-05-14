@@ -12,7 +12,7 @@ PROJECT := streetview
 PROJECT_DIR = $(PWD)/$(PROJECT)
 TEST_DIR = $(PWD)/tests
 PYTHON_CMD := PYTHONPATH=$(PWD) $(VENV)/bin/python
-COVERAGE := 50  # Required code coverage
+COVERAGE := 90  # Required code coverage
 
 ifndef VERBOSE
 .SILENT:

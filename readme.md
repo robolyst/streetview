@@ -62,6 +62,18 @@ image = get_streetview(
 image.save("image.jpg", "jpeg")
 ```
 
+## Download panorama
+
+You can download a full panorama like this:
+
+```python
+from streetview import get_panorama
+
+image = get_panorama(pano_id="z80QZ1_QgCbYwj7RrmlS0Q")
+
+image.save("image.jpg", "jpeg")
+```
+
 # Development
 
 Run tests with:

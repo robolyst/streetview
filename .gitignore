@@ -16,3 +16,4 @@ output.txt
 docs/_build/
 .env
 *.jpg
+.DS_Store
