@@ -64,13 +64,3 @@ class TestPanoidsOnSydney:
             "month": 5,
         }
         assert any([p == panoid for p in self.result])
-
-
-# def test_():
-#     resp = streetview.panoids_request(**SYDNEY)
-#     result = streetview.extract_panoids(resp.text)
-
-#     for p in result:
-#         print(p['panoid'])
-
-#     assert False

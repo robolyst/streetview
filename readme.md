@@ -1,5 +1,4 @@
-streetview
-==========
+# streetview
 
 This is a light module for downloading photos from Google street view. The
 functions allow you to retrieve current and **old** photos. Google does have an
@@ -12,17 +11,17 @@ Street View.
 public use. Therefore, this hack may break if Google makes changes to how
 Street View works.*
 
-Install
-------------
+# Install
 
 Install from pip with:
 
 	pip install git+https://github.com/robolyst/streetview
 
-Quick start
-------------
+# Quick start
 
-The photos on Google street view are panoramas. Each parnorama has it's own
+
+
+The photos on Google street view are panoramas. Each parnorama has its own
 unique ID. Retrieving photos is a two step process. First, you must translate GPS
 coordinates into panorama IDs. The following code retrieves a list of
 the closest panoramas.
@@ -74,6 +73,15 @@ function:
 	streetview.api_download(panoid, heading, flat_dir, key)
 
 
-Documentation
--------------
-Full documentation is at docs/build/html/index.html
+# Development
+
+To setup the development environment run:
+```bash
+make deps
+```
+this will install mamba and the required Python packages into a local env.
+
+Run tests with:
+```bash
+make test
+```
