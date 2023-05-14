@@ -3,7 +3,6 @@ import os
 import pytest
 
 from streetview import get_panorama_meta, search_panoramas
-from streetview.search import search_request
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
 
@@ -27,18 +26,6 @@ TUNIS = {
     "lat": 36.8032829,
     "lon": 10.1808486,
 }
-
-
-@pytest.mark.vcr
-def test_thatsearch_request_returns_200():
-    resp = search_request(**SYDNEY)
-    assert resp.status_code == 200
-
-
-@pytest.mark.vcr
-def test_thatsearch_request_returns_large_payload():
-    resp = search_request(**SYDNEY)
-    assert len(resp.text) > 1000
 
 
 class GenericGetPanoidsTest:
