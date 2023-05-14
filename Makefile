@@ -18,10 +18,10 @@ ifndef VERBOSE
 .SILENT:
 endif
 
-.PHONY: help deps clean check format test run demo
+.PHONY: help deps python clean check format test build
 
 help:
-	grep -E '^[0-9a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "%-30s %s\n", $$1, $$2}'
+	grep -E '[0-9a-zA-Z_-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 $(MAMBA):
 	echo "Installing Mamba..."
@@ -37,7 +37,7 @@ $(DEPS): environment.yml $(MAMBA)
 
 deps: $(DEPS)  ## Install project dependencies
 
-python: $(DEPS)
+python: $(DEPS)  ## Drop into a Python REPL
 	$(PYTHON_CMD)
 
 clean:  ## Delete unnecessary files from the project
