@@ -22,25 +22,35 @@ class Tile:
     image: Image.Image
 
 
-def iter_tile_info(pano_id: str) -> Generator[TileInfo, None, None]:
+def get_width_and_height_from_zoom(zoom: int) -> (int, int):
+    """
+    Returns the width and height of a panorama at a given zoom level, depends on the zoom level.
+    """
+    return 2**zoom, 2 ** (zoom - 1)
+
+
+def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
+    """
+    Returns the URL to download a tile.
+    """
+    return f"https://cbk0.google.com/cbk?output=tile&panoid={pano_id}&zoom={zoom}&x={x}&y={y}"
+
+
+def iter_tile_info(pano_id: str, zoom: int) -> Generator[TileInfo, None, None]:
     """
     Generate a list of a panorama's tiles and their position.
     """
-
-    image_url = (
-        "https://cbk0.google.com/cbk?output=tile&panoid={0:}&zoom=5&x={1:}&y={2:}"
-    )
-
-    for x, y in itertools.product(range(26), range(13)):
+    width, height = get_width_and_height_from_zoom(zoom)
+    for x, y in itertools.product(range(width), range(height)):
         yield TileInfo(
             x=x,
             y=y,
-            fileurl=image_url.format(pano_id, x, y),
+            fileurl=make_download_url(pano_id=pano_id, zoom=zoom, x=x, y=y),
         )
 
 
-def iter_tiles(pano_id: str) -> Generator[Tile, None, None]:
-    for info in iter_tile_info(pano_id):
+def iter_tiles(pano_id: str, zoom: int) -> Generator[Tile, None, None]:
+    for info in iter_tile_info(pano_id, zoom):
         # Try to download the image file
         while True:
             try:
@@ -58,7 +68,7 @@ def iter_tiles(pano_id: str) -> Generator[Tile, None, None]:
         del image
 
 
-def get_panorama(pano_id: str) -> Image.Image:
+def get_panorama(pano_id: str, zoom: int) -> Image.Image:
     """
     Downloads a streetview panorama.
     """
@@ -66,9 +76,10 @@ def get_panorama(pano_id: str) -> Image.Image:
     tile_width = 512
     tile_height = 512
 
-    panorama = Image.new("RGB", (26 * tile_width, 13 * tile_height))
+    total_width, total_height = get_width_and_height_from_zoom(zoom)
+    panorama = Image.new("RGB", (total_width * tile_width, total_height * tile_height))
 
-    for tile in iter_tiles(pano_id=pano_id):
+    for tile in iter_tiles(pano_id=pano_id, zoom=zoom):
         panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
         del tile
 
