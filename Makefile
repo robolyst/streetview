@@ -11,6 +11,7 @@ DEPS := $(VENV)/.deps
 PROJECT := streetview
 PROJECT_DIR = $(PWD)/$(PROJECT)
 TEST_DIR = $(PWD)/tests
+PYTHON_VERSION ?= 3.11
 PYTHON_CMD := PYTHONPATH=$(PWD) $(VENV)/bin/python
 COVERAGE := 90  # Required code coverage
 
@@ -31,6 +32,7 @@ $(DEPS): environment.yml $(MAMBA)
 	echo "Installing dependencies..."
 	rm -rf $(VENV)
 	$(MAMBA) create --quiet --yes -p $(VENV)
+	$(MAMBA) install --quiet --yes --log-level 4 -p $(VENV) python=$(PYTHON_VERSION) -c conda-forge
 	$(MAMBA) install --quiet --yes --log-level 4 -p $(VENV) -f environment.yml
 	cp environment.yml $(DEPS)
 
