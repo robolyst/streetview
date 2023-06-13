@@ -1,4 +1,5 @@
 from io import BytesIO
+from typing import Dict, Union
 
 import requests
 from PIL import Image
@@ -62,7 +63,7 @@ def get_streetview(
     """
 
     url = "https://maps.googleapis.com/maps/api/streetview"
-    params: dict[str, str | int] = {
+    params: Dict[str, Union[str, int]] = {
         "size": "%dx%d" % (width, height),
         "fov": fov,
         "pitch": pitch,
