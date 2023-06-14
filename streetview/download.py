@@ -68,7 +68,7 @@ def iter_tiles(pano_id: str, zoom: int) -> Generator[Tile, None, None]:
         del image
 
 
-def get_panorama(pano_id: str, zoom: int) -> Image.Image:
+def get_panorama(pano_id: str, zoom: int = 5) -> Image.Image:
     """
     Downloads a streetview panorama.
     """
