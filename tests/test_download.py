@@ -29,8 +29,8 @@ def hash_tile(tile: Image.Image):
 
 
 @pytest.mark.parametrize("zoom", [1, 2, 3, 4, 5, 6, 7])
-@pytest.mark.vcr
-def test_width_and_height_from_zoom_is_correct(zoom: int):
+@pytest.mark.vcr()
+def test_width_from_zoom_is_correct(zoom: int):
     width, height = get_width_and_height_from_zoom(zoom)
 
     # Try to fetch one more tile than the width and height and verify we get a bad tile
@@ -44,6 +44,13 @@ def test_width_and_height_from_zoom_is_correct(zoom: int):
     out_of_bound_tile = fetch_panorama_tile(out_of_bound_width_tile_info)
     assert hash_tile(out_of_bound_tile) == BAD_TILE_MD5
 
+
+@pytest.mark.parametrize("zoom", [1, 2, 3, 4, 5, 6, 7])
+@pytest.mark.vcr()
+def test_height_from_zoom_is_correct(zoom: int):
+    width, height = get_width_and_height_from_zoom(zoom)
+
+    # Try to fetch one more tile than the width and height and verify we get a bad tile
     out_of_bound_height_tile_info = TileInfo(
         x=width,
         y=height + 1,
