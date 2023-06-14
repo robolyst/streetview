@@ -36,6 +36,21 @@ def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
     return f"https://cbk0.google.com/cbk?output=tile&panoid={pano_id}&zoom={zoom}&x={x}&y={y}"
 
 
+def fetch_panorama_tile(tile_info: TileInfo) -> Image.Image:
+    """
+    Tries to download a tile, returns a PIL Image.
+    """
+    while True:
+        try:
+            response = requests.get(tile_info.fileurl, stream=True)
+            break
+        except requests.ConnectionError:
+            print("Connection error. Trying again in 2 seconds.")
+            time.sleep(2)
+
+    return Image.open(BytesIO(response.content))
+
+
 def iter_tile_info(pano_id: str, zoom: int) -> Generator[TileInfo, None, None]:
     """
     Generate a list of a panorama's tiles and their position.
@@ -51,21 +66,8 @@ def iter_tile_info(pano_id: str, zoom: int) -> Generator[TileInfo, None, None]:
 
 def iter_tiles(pano_id: str, zoom: int) -> Generator[Tile, None, None]:
     for info in iter_tile_info(pano_id, zoom):
-        # Try to download the image file
-        while True:
-            try:
-                response = requests.get(info.fileurl, stream=True)
-                break
-            except requests.ConnectionError:
-                print("Connection error. Trying again in 2 seconds.")
-                time.sleep(2)
-
-        image = Image.open(BytesIO(response.content))
-
+        image = fetch_panorama_tile(info)
         yield Tile(x=info.x, y=info.y, image=image)
-
-        del response
-        del image
 
 
 def get_panorama(pano_id: str, zoom: int = 5) -> Image.Image:

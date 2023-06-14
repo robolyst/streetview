@@ -2,11 +2,12 @@ import hashlib
 from io import BytesIO
 
 import pytest
-import requests
 from PIL import Image
 
 from streetview import get_panorama
 from streetview.download import (
+    TileInfo,
+    fetch_panorama_tile,
     get_width_and_height_from_zoom,
     iter_tile_info,
     iter_tiles,
@@ -17,18 +18,14 @@ from streetview.download import (
 BAD_TILE_MD5 = "be32aa9ed3880664433199f9e0615cd6"
 
 
-def get_tile_md5_from_url(pano_id: str, zoom: int, x: int, y: int):
+def hash_tile(tile: Image.Image):
     """
-    Returns the md5 hash of a tile from url
+    Returns the md5 hash of a tile
     """
-    url = make_download_url(pano_id=pano_id, zoom=zoom, x=x, y=y)
-    response = requests.get(url, stream=True)
-    image = Image.open(BytesIO(response.content))
-
-    image_file = BytesIO()
-    image.save(image_file, "jpeg")
-    image_file.seek(0)
-    return hashlib.md5(image_file.read()).hexdigest()
+    tile_mock_file = BytesIO()
+    tile.save(tile_mock_file, "jpeg")
+    tile_mock_file.seek(0)
+    return hashlib.md5(tile_mock_file.read()).hexdigest()
 
 
 @pytest.mark.parametrize("zoom", [1, 2, 3, 4, 5, 6, 7])
@@ -37,15 +34,25 @@ def test_width_and_height_from_zoom_is_correct(zoom: int):
     width, height = get_width_and_height_from_zoom(zoom)
 
     # Try to fetch one more tile than the width and height and verify we get a bad tile
-    out_of_bound_width_md5 = get_tile_md5_from_url(
-        pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=zoom, x=width + 1, y=height
+    out_of_bound_width_tile_info = TileInfo(
+        x=width + 1,
+        y=height,
+        fileurl=make_download_url(
+            pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=zoom, x=width + 1, y=height
+        ),
     )
-    assert out_of_bound_width_md5 == BAD_TILE_MD5
+    out_of_bound_tile = fetch_panorama_tile(out_of_bound_width_tile_info)
+    assert hash_tile(out_of_bound_tile) == BAD_TILE_MD5
 
-    out_of_bound_height_md5 = get_tile_md5_from_url(
-        pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=zoom, x=width, y=height + 1
+    out_of_bound_height_tile_info = TileInfo(
+        x=width,
+        y=height + 1,
+        fileurl=make_download_url(
+            pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=zoom, x=width, y=height + 1
+        ),
     )
-    assert out_of_bound_height_md5 == BAD_TILE_MD5
+    out_of_bound_tile = fetch_panorama_tile(out_of_bound_height_tile_info)
+    assert hash_tile(out_of_bound_tile) == BAD_TILE_MD5
 
 
 @pytest.mark.parametrize("zoom", [1, 2, 3, 4, 5, 6, 7])
