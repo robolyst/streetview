@@ -32,6 +32,7 @@ def get_tile_md5_from_url(pano_id: str, zoom: int, x: int, y: int):
 
 
 @pytest.mark.parametrize("zoom", [1, 2, 3, 4, 5, 6, 7])
+@pytest.mark.vcr
 def test_width_and_height_from_zoom_is_correct(zoom: int):
     width, height = get_width_and_height_from_zoom(zoom)
 
