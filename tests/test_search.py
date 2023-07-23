@@ -104,3 +104,15 @@ def test_search_where_there_are_no_dates():
 
     dates = [p.date for p in result]
     assert dates == [None] * len(dates)
+
+
+def test_coordinates_with_missing_pitch():
+    panos = search_panoramas(35.658353457849685, 139.6920989241623)
+    is_pitch_none = [p.pitch is None for p in panos]
+    assert any(is_pitch_none)
+
+
+def test_coordinates_with_missing_roll():
+    panos = search_panoramas(35.658353457849685, 139.6920989241623)
+    is_roll_none = [p.roll is None for p in panos]
+    assert any(is_roll_none)
