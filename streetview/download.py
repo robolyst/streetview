@@ -25,7 +25,8 @@ class Tile:
 def get_width_and_height_from_zoom(zoom: int) -> Tuple[int, int]:
     """
     Returns the width and height of a panorama at a given zoom level, depends on the
-    zoom level.
+    zoom level. Note that this is not the same as the actual 360 panorama image size.
+    To keep only the actual 360, see the should_crop parameter in get_panorama().
     """
     return 2**zoom, 2 ** (zoom - 1)
 
@@ -74,7 +75,7 @@ def iter_tiles(pano_id: str, zoom: int) -> Generator[Tile, None, None]:
         yield Tile(x=info.x, y=info.y, image=image)
 
 
-def get_panorama(pano_id: str, zoom: int = 5) -> Image.Image:
+def get_panorama(pano_id: str, zoom: int = 5, should_crop: bool = False) -> Image.Image:
     """
     Downloads a streetview panorama.
     """
@@ -88,5 +89,11 @@ def get_panorama(pano_id: str, zoom: int = 5) -> Image.Image:
     for tile in iter_tiles(pano_id=pano_id, zoom=zoom):
         panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
         del tile
+
+    if should_crop:
+        # According to: https://medium.com/@nocomputer/creating-point-clouds-with-google-street-view-185faad9d4ee
+        actual_dim = 416
+        actual_width, actual_height = actual_dim * total_width, actual_dim * total_height
+        panorama = panorama.crop((0, 0, actual_width, actual_height))
 
     return panorama
