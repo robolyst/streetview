@@ -1,5 +1,6 @@
 import itertools
 import time
+import concurrent.futures
 from dataclasses import dataclass
 from io import BytesIO
 from typing import Generator, Tuple
@@ -68,15 +69,36 @@ def iter_tile_info(pano_id: str, zoom: int) -> Generator[TileInfo, None, None]:
         )
 
 
-def iter_tiles(pano_id: str, zoom: int) -> Generator[Tile, None, None]:
-    for info in iter_tile_info(pano_id, zoom):
-        image = fetch_panorama_tile(info)
-        yield Tile(x=info.x, y=info.y, image=image)
+def iter_tiles(
+    pano_id: str, zoom: int, multi_threaded: bool = False
+) -> Generator[Tile, None, None]:
+    if not multi_threaded:
+        for info in iter_tile_info(pano_id, zoom):
+            image = fetch_panorama_tile(info)
+            yield Tile(x=info.x, y=info.y, image=image)
+        return
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future_to_tile = {
+            executor.submit(fetch_panorama_tile, info): info
+            for info in iter_tile_info(pano_id, zoom)
+        }
+        for future in concurrent.futures.as_completed(future_to_tile):
+            info = future_to_tile[future]
+            try:
+                image = future.result()
+            except Exception as exc:
+                print(f"{info.fileurl} generated an exception: {exc}")
+            else:
+                yield Tile(x=info.x, y=info.y, image=image)
 
 
-def get_panorama(pano_id: str, zoom: int = 5) -> Image.Image:
+def get_panorama(
+    pano_id: str, zoom: int = 5, multi_threaded: bool = False
+) -> Image.Image:
     """
     Downloads a streetview panorama.
+    Multi-threaded is a lot faster, but it's also a lot more likely to get you banned.
     """
 
     tile_width = 512
@@ -85,7 +107,7 @@ def get_panorama(pano_id: str, zoom: int = 5) -> Image.Image:
     total_width, total_height = get_width_and_height_from_zoom(zoom)
     panorama = Image.new("RGB", (total_width * tile_width, total_height * tile_height))
 
-    for tile in iter_tiles(pano_id=pano_id, zoom=zoom):
+    for tile in iter_tiles(pano_id=pano_id, zoom=zoom, multi_threaded=multi_threaded):
         panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
         del tile
 
