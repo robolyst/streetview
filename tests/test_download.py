@@ -81,3 +81,9 @@ def test_that_first_tile_can_be_saved():
 def test_that_panorama_downloads_successfully():
     image = get_panorama(pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=1)
     image.save("image.jpg", "jpeg")
+
+
+@pytest.mark.vcr()
+def test_that_panorama_downloads_successfully_multi_threaded():
+    image = get_panorama(pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=1, multi_threaded=True)
+    image.save("image.jpg", "jpeg")
