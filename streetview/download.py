@@ -141,7 +141,6 @@ def crop_bottom_and_right_black_border(img: Image.Image):
 
         if pixel_color > black_luminance:
             # Found a non-black pixel
-
             # Double check if all the pixels below this one are black
             all_pixels_below = list(
                 bw_img.crop((0, pixel_cursor[1] + 1, width, height)).getdata()
@@ -155,7 +154,7 @@ def crop_bottom_and_right_black_border(img: Image.Image):
                 valid_max_y = pixel_cursor[1]
                 break
             else:
-                print(f"False y positive at {pixel_cursor}")
+                # A false positive, probably the actual valid bottom pixel is very close to black
                 # Reset the cursor to the next vertical line to the right
                 pixel_cursor = (pixel_cursor[0] + 1, height - 1)
 
@@ -182,11 +181,21 @@ def crop_bottom_and_right_black_border(img: Image.Image):
                 valid_max_x = pixel_cursor[0]
                 break
             else:
-                print(f"False x positive at {pixel_cursor}")
+                # A false positive, probably the actual valid right pixel is very close to black
                 # Reset the cursor to the next horizontal line below
                 pixel_cursor = (width - 1, pixel_cursor[1] + 1)
 
         else:
             pixel_cursor = (pixel_cursor[0] - 1, pixel_cursor[1])
 
-    return img.crop((0, 0, valid_max_x + 1, valid_max_y + 1))
+    valid_height = valid_max_y + 1
+    valid_width = valid_max_x + 1
+
+    if valid_height == height and valid_width == width:
+        # No black border found
+        return img
+
+    print(
+        f"Found black border. Cropping from {width}x{height} to {valid_width}x{valid_height}"
+    )
+    return img.crop((0, 0, valid_width, valid_height))
