@@ -97,7 +97,7 @@ def get_panorama(
     pano_id: str,
     zoom: int = 5,
     multi_threaded: bool = False,
-    crop_bottom_right_border: bool = True,
+    crop_bottom_right_border: bool = False,
 ) -> Image.Image:
     """
     Downloads a streetview panorama.
