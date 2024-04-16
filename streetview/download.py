@@ -94,11 +94,15 @@ def iter_tiles(
 
 
 def get_panorama(
-    pano_id: str, zoom: int = 5, multi_threaded: bool = False
+    pano_id: str,
+    zoom: int = 5,
+    multi_threaded: bool = False,
+    crop_bottom_right_border: bool = True,
 ) -> Image.Image:
     """
     Downloads a streetview panorama.
     Multi-threaded is a lot faster, but it's also a lot more likely to get you banned.
+    Crop border will remove the black border at the bottom and right of the panorama.
     """
 
     tile_width = 512
@@ -111,4 +115,78 @@ def get_panorama(
         panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
         del tile
 
+    if crop_bottom_right_border:
+        # Crop the black border at the bottom and right of the panorama
+        # This is a common issue with user-contributed panoramas
+        # The dimensions of the panorama are not always correct / multiple of 512
+        panorama = crop_bottom_and_right_black_border(panorama)
+
     return panorama
+
+
+def crop_bottom_and_right_black_border(img: Image.Image):
+    """
+    Crop the black border at the bottom and right of the panorama.
+    The implementation is not perfect, but it works for most cases.
+    """
+    (width, height) = img.size
+    bw_img = img.convert("L")
+    black_luminance = 4
+
+    # Find the bottom of the panorama
+    pixel_cursor = (0, height - 1)
+    valid_max_y = height - 1
+    while pixel_cursor[0] < width and pixel_cursor[1] >= 0:
+        pixel_color = bw_img.getpixel(pixel_cursor)
+
+        if pixel_color > black_luminance:
+            # Found a non-black pixel
+
+            # Double check if all the pixels below this one are black
+            all_pixels_below = list(
+                bw_img.crop((0, pixel_cursor[1] + 1, width, height)).getdata()
+            )
+            all_black = True
+            for pixel in all_pixels_below:
+                if pixel > black_luminance:
+                    all_black = False
+
+            if all_black:
+                valid_max_y = pixel_cursor[1]
+                break
+            else:
+                print(f"False y positive at {pixel_cursor}")
+                # Reset the cursor to the next vertical line to the right
+                pixel_cursor = (pixel_cursor[0] + 1, height - 1)
+
+        else:
+            pixel_cursor = (pixel_cursor[0], pixel_cursor[1] - 1)
+
+    # Find the right of the panorama
+    pixel_cursor = (width - 1, 0)
+    valid_max_x = width - 1
+    while pixel_cursor[1] < height and pixel_cursor[0] >= 0:
+        pixel_color = bw_img.getpixel(pixel_cursor)
+
+        if pixel_color > black_luminance:
+            # Found a non-black pixel
+            # Double check if all the pixels to the right of this one are black
+            all_pixels_to_the_right = list(
+                bw_img.crop((pixel_cursor[0] + 1, 0, width, height)).getdata()
+            )
+            all_black = True
+            for pixel in all_pixels_to_the_right:
+                if pixel > black_luminance:
+                    all_black = False
+            if all_black:
+                valid_max_x = pixel_cursor[0]
+                break
+            else:
+                print(f"False x positive at {pixel_cursor}")
+                # Reset the cursor to the next horizontal line below
+                pixel_cursor = (width - 1, pixel_cursor[1] + 1)
+
+        else:
+            pixel_cursor = (pixel_cursor[0] - 1, pixel_cursor[1])
+
+    return img.crop((0, 0, valid_max_x + 1, valid_max_y + 1))
