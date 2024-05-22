@@ -9,11 +9,13 @@ dependencies:
   - requests
   - pillow
   - pydantic
+  - httpx
 
   # Testing dependencies
   - pytest
   - pytest-cov
   - pytest-vcr
+  - pytest-asyncio
   - isort
   - black
   - flake8

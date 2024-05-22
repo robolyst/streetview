@@ -4,7 +4,7 @@ from io import BytesIO
 import pytest
 from PIL import Image
 
-from streetview import get_panorama
+from streetview import get_panorama, get_panorama_async
 from streetview.download import (
     TileInfo,
     fetch_panorama_tile,
@@ -86,4 +86,11 @@ def test_that_panorama_downloads_successfully():
 @pytest.mark.vcr()
 def test_that_panorama_downloads_successfully_multi_threaded():
     image = get_panorama(pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=1, multi_threaded=True)
+    image.save("image.jpg", "jpeg")
+
+
+@pytest.mark.asyncio
+@pytest.mark.vcr()
+async def test_that_panorama_downloads_successfully_async():
+    image = await get_panorama_async(pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=1)
     image.save("image.jpg", "jpeg")
