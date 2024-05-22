@@ -24,5 +24,6 @@ setup(
         "requests",
         "pillow",
         "pydantic",
+        "httpx"
     ],
 )
