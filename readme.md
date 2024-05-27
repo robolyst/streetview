@@ -62,6 +62,16 @@ image = get_streetview(
 image.save("image.jpg", "jpeg")
 ```
 
+To download the panorama in an asynchronous context:
+
+```python
+from streetview import get_panorama_async
+
+image = await get_panorama_async(pano_id="z80QZ1_QgCbYwj7RrmlS0Q")
+
+image.save("image.jpg", "jpeg")
+```
+
 ## Download panorama
 
 You can download a full panorama like this:
