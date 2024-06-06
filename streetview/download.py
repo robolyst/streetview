@@ -1,12 +1,16 @@
+import asyncio
+import concurrent.futures
 import itertools
 import time
-import concurrent.futures
 from dataclasses import dataclass
 from io import BytesIO
-from typing import Generator, Tuple
+from typing import AsyncGenerator, Generator, Tuple
 
+import httpx
 import requests
 from PIL import Image
+
+async_client = httpx.AsyncClient()
 
 
 @dataclass
@@ -56,6 +60,21 @@ def fetch_panorama_tile(tile_info: TileInfo) -> Image.Image:
     return Image.open(BytesIO(response.content))
 
 
+async def fetch_panorama_tile_async(tile_info: TileInfo) -> Image.Image:
+    """
+    Asynchronously tries to download a tile, returns a PIL Image.
+    """
+    while True:
+        try:
+            response = await async_client.get(tile_info.fileurl)
+            break
+        except httpx.RequestError as e:
+            print(f"Request error {e}. Trying again in 2 seconds.")
+            await asyncio.sleep(2)
+
+    return Image.open(BytesIO(response.content))
+
+
 def iter_tile_info(pano_id: str, zoom: int) -> Generator[TileInfo, None, None]:
     """
     Generate a list of a panorama's tiles and their position.
@@ -93,6 +112,13 @@ def iter_tiles(
                 yield Tile(x=info.x, y=info.y, image=image)
 
 
+async def iter_tiles_async(pano_id: str, zoom: int) -> AsyncGenerator[Tile, None]:
+    for info in iter_tile_info(pano_id, zoom):
+        image = await fetch_panorama_tile_async(info)
+        yield Tile(x=info.x, y=info.y, image=image)
+    return
+
+
 def get_panorama(
     pano_id: str,
     zoom: int = 5,
@@ -110,6 +136,24 @@ def get_panorama(
     panorama = Image.new("RGB", (total_width * tile_width, total_height * tile_height))
 
     for tile in iter_tiles(pano_id=pano_id, zoom=zoom, multi_threaded=multi_threaded):
+        panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
+        del tile
+
+    return panorama
+
+
+async def get_panorama_async(pano_id: str, zoom: int) -> Image.Image:
+    """
+    Downloads a streetview panorama by iterating through the tiles asynchronously.
+    This runs in about the same speed as `get_panorama` with `multi_threaded=True`.
+    """
+    tile_width = 512
+    tile_height = 512
+
+    total_width, total_height = get_width_and_height_from_zoom(zoom)
+    panorama = Image.new("RGB", (total_width * tile_width, total_height * tile_height))
+
+    async for tile in iter_tiles_async(pano_id=pano_id, zoom=zoom):
         panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
         del tile
 
