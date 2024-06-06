@@ -13,6 +13,7 @@ from streetview.download import (
     iter_tiles,
     make_download_url,
 )
+from streetview.tool import crop_bottom_and_right_black_border
 
 # This MD5 was retrieved empirically by downloading tile with bad coordinates
 BAD_TILE_MD5 = "be32aa9ed3880664433199f9e0615cd6"
@@ -94,5 +95,6 @@ def test_that_panorama_downloads_successfully_crop_bottom_right_border():
     # this pano_id has a black border on the bottom right
     pano_id = "EVGmA-L6LuI_7-elZaDq1g"
     for i in range(1, 6):
-        image = get_panorama(pano_id=pano_id, zoom=i, crop_bottom_right_border=True)
+        image = get_panorama(pano_id=pano_id, zoom=i)
+        image = crop_bottom_and_right_black_border(image)
         image.save(f"image-z{i}.jpg", "jpeg")
