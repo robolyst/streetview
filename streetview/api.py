@@ -15,6 +15,7 @@ class MetaData(BaseModel):
     date: str
     location: Location
     pano_id: str
+    copyright: str
 
 
 def get_panorama_meta(pano_id: str, api_key: str) -> MetaData:
