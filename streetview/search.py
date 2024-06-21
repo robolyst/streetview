@@ -15,6 +15,7 @@ class Panorama(BaseModel):
     pitch: Optional[float]
     roll: Optional[float]
     date: Optional[str]
+    elevation: Optional[float]
 
 
 def make_search_url(lat: float, lon: float) -> str:
@@ -82,6 +83,7 @@ def extract_panoramas(text: str) -> List[Panorama]:
             pitch=pano[2][2][1] if len(pano[2][2]) >= 2 else None,
             roll=pano[2][2][2] if len(pano[2][2]) >= 3 else None,
             date=dates[i] if i < len(dates) else None,
+            elevation=pano[3][0],
         )
         for i, pano in enumerate(raw_panos)
     ]
