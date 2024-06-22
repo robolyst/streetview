@@ -120,7 +120,9 @@ async def iter_tiles_async(pano_id: str, zoom: int) -> AsyncGenerator[Tile, None
 
 
 def get_panorama(
-    pano_id: str, zoom: int = 5, multi_threaded: bool = False
+    pano_id: str,
+    zoom: int = 5,
+    multi_threaded: bool = False,
 ) -> Image.Image:
     """
     Downloads a streetview panorama.
