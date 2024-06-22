@@ -13,7 +13,7 @@ from streetview.download import (
     iter_tiles,
     make_download_url,
 )
-from streetview.tool import crop_bottom_and_right_black_border
+from streetview.tools import crop_bottom_and_right_black_border
 
 # This MD5 was retrieved empirically by downloading tile with bad coordinates
 BAD_TILE_MD5 = "be32aa9ed3880664433199f9e0615cd6"
