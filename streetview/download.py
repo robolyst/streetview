@@ -48,7 +48,9 @@ def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
     )
 
 
-def fetch_panorama_tile(tile_info: TileInfo, max_retries: int) -> Image.Image:
+def fetch_panorama_tile(
+    tile_info: TileInfo, max_retries: int = DEFAULT_MAX_RETRIES
+) -> Image.Image:
     """
     Tries to download a tile, returns a PIL Image.
     """
@@ -63,7 +65,7 @@ def fetch_panorama_tile(tile_info: TileInfo, max_retries: int) -> Image.Image:
 
 
 async def fetch_panorama_tile_async(
-    tile_info: TileInfo, max_retries: int
+    tile_info: TileInfo, max_retries: int = DEFAULT_MAX_RETRIES
 ) -> Image.Image:
     """
     Asynchronously tries to download a tile, returns a PIL Image.
@@ -96,7 +98,7 @@ def iter_tile_info(pano_id: str, zoom: int) -> Generator[TileInfo, None, None]:
 def iter_tiles(
     pano_id: str,
     zoom: int,
-    max_retries: int,
+    max_retries: int = DEFAULT_MAX_RETRIES,
     multi_threaded: bool = False,
 ) -> Generator[Tile, None, None]:
     if not multi_threaded:
@@ -123,7 +125,7 @@ def iter_tiles(
 
 
 async def iter_tiles_async(
-    pano_id: str, zoom: int, max_retries: int
+    pano_id: str, zoom: int, max_retries: int = DEFAULT_MAX_RETRIES
 ) -> AsyncGenerator[Tile, None]:
     for info in iter_tile_info(pano_id, zoom):
         image = await fetch_panorama_tile_async(info, max_retries)
