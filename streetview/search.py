@@ -83,7 +83,7 @@ def extract_panoramas(text: str) -> List[Panorama]:
             pitch=pano[2][2][1] if len(pano[2][2]) >= 2 else None,
             roll=pano[2][2][2] if len(pano[2][2]) >= 3 else None,
             date=dates[i] if i < len(dates) else None,
-            elevation=pano[3][0],
+            elevation=pano[3][0] if len(pano) >= 4 else None,
         )
         for i, pano in enumerate(raw_panos)
     ]
