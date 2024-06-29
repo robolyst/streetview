@@ -2,9 +2,8 @@ import json
 import re
 from typing import List, Optional
 
-import requests
+import httpx
 from pydantic import BaseModel
-from requests.models import Response
 
 
 class Panorama(BaseModel):
@@ -34,13 +33,13 @@ def make_search_url(lat: float, lon: float) -> str:
     return url.format(lat, lon)
 
 
-def search_request(lat: float, lon: float) -> Response:
+def search_request(lat: float, lon: float) -> httpx.Response:
     """
     Gets the response of the script on Google's servers that returns the
     closest panoramas (ids) to a give GPS coordinate.
     """
     url = make_search_url(lat, lon)
-    return requests.get(url)
+    return httpx.get(url)
 
 
 def extract_panoramas(text: str) -> List[Panorama]:
@@ -83,7 +82,7 @@ def extract_panoramas(text: str) -> List[Panorama]:
             pitch=pano[2][2][1] if len(pano[2][2]) >= 2 else None,
             roll=pano[2][2][2] if len(pano[2][2]) >= 3 else None,
             date=dates[i] if i < len(dates) else None,
-            elevation=pano[3][0],
+            elevation=pano[3][0] if len(pano) >= 4 else None,
         )
         for i, pano in enumerate(raw_panos)
     ]
@@ -97,3 +96,32 @@ def search_panoramas(lat: float, lon: float) -> List[Panorama]:
     resp = search_request(lat, lon)
     pans = extract_panoramas(resp.text)
     return pans
+
+
+def parse_url(url: str) -> tuple[str, ...]:
+    """
+    extracts the lat, lon and pano_id from url
+    """
+    return re.search(
+        r"\/@([-+]?[0-9]+[.]?[0-9]*),([-+]?[0-9]+[.]?[0-9]*).+!1s(.+)!2e",
+        url
+        ).groups()
+
+
+def search_panoramas_url(url: str) -> list[Panorama]:
+    """
+    Gets the closest panoramas (ids) to the GPS coordinates in the url.
+    """
+    lat, lon, _ = parse_url(url)
+    return search_panoramas(lat, lon)
+
+
+def search_panoramas_url_exact(url: str) -> Panorama:
+    """
+    Searches for exact panorama in url
+    """
+    _, _, id = parse_url(url)
+    panos = search_panoramas_url(url)
+    panos = [pano for pano in panos if pano.pano_id == id]
+
+    return panos[0] if len(panos) > 0 else None
