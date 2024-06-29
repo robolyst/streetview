@@ -97,3 +97,26 @@ def search_panoramas(lat: float, lon: float) -> List[Panorama]:
     resp = search_request(lat, lon)
     pans = extract_panoramas(resp.text)
     return pans
+
+
+def parse_url(url: str) -> tuple[str, ...]:
+    """
+    extracts the lat, lon and pano_id from url
+    """
+    return re.search(r"\/@([-+]?[0-9]+[.]?[0-9]*),([-+]?[0-9]+[.]?[0-9]*).+!1s(.+)!2e", url).groups()
+
+def search_panoramas_url(url: str) -> list[Panorama]:
+    """
+    Gets the closest panoramas (ids) to the GPS coordinates in the url.
+    """
+    lat, lon, _ = parse_url(url)
+    return search_panoramas(lat, lon)
+
+def search_panoramas_url_exact(url:str) -> Panorama:
+    """
+    Searches for exact panorama in url 
+    """
+    panos = search_panoramas_url(url)
+    panos = list(filter(lambda pano: pano.pano_id == id, panos))
+    
+    return panos[0] if len(panos) > 0 else None
