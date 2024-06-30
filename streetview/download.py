@@ -7,7 +7,6 @@ from io import BytesIO
 from typing import AsyncGenerator, Generator, Tuple
 
 import httpx
-import requests
 from PIL import Image
 
 async_client = httpx.AsyncClient()
@@ -56,12 +55,13 @@ def fetch_panorama_tile(
     """
     for _ in range(max_retries):
         try:
-            response = requests.get(tile_info.fileurl, stream=True)
-            return Image.open(BytesIO(response.content))
-        except requests.ConnectionError:
+            with httpx.stream("GET", tile_info.fileurl) as response:
+                response.read()
+                return Image.open(BytesIO(response.content))
+        except httpx.RequestError:
             print("Connection error. Trying again in 2 seconds.")
             time.sleep(2)
-    raise requests.ConnectionError("Max retries exceeded.")
+    raise httpx.RequestError("Max retries exceeded.")
 
 
 async def fetch_panorama_tile_async(
