@@ -2,7 +2,12 @@ import os
 
 import pytest
 
-from streetview import get_panorama_meta, search_panoramas
+from streetview import (
+    get_panorama_meta,
+    search_panoramas,
+    search_panoramas_url,
+    search_panoramas_url_exact
+)
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
 
@@ -116,3 +121,42 @@ def test_coordinates_with_missing_roll():
     panos = search_panoramas(35.658353457849685, 139.6920989241623)
     is_roll_none = [p.roll is None for p in panos]
     assert any(is_roll_none)
+
+
+@pytest.mark.vcr
+def test_search_panoramas_url():
+    panos = search_panoramas_url(
+        "https://www.google.com/maps/@40.6982454,-73.980301,3a,84.9y,36.94h,99.2t"
+        "/data=!3m6!1e1!3m4!1sp-EPpErUWv2pjDvUC3N6rQ!2e0!7i16384!8i8192?entry=ttu"
+        )
+    first = panos[0]
+    print(first)
+
+    result = str(first)
+    expected = (
+        "pano_id='tJDTHMWFNGFgc9btenkHyQ'"
+        "lat=40.69821429343249 lon=-73.9803166815466"
+        "heading=92.4283676147461 pitch=89.87837219238281 roll=1.127663612365723"
+        "date='2017-09' elevation=None"
+    )
+
+    assert result == expected
+
+
+@pytest.mark.vcr
+def test_search_panoramas_url_exact():
+    pano = search_panoramas_url_exact(
+        "https://www.google.com/maps/@40.6982454,-73.980301,3a,84.9y,36.94h,99.2t"
+        "/data=!3m6!1e1!3m4!1sp-EPpErUWv2pjDvUC3N6rQ!2e0!7i16384!8i8192?entry=ttu"
+        )
+    print(pano)
+
+    result = str(pano)
+    expected = (
+        "pano_id='p-EPpErUWv2pjDvUC3N6rQ'"
+        "lat=40.69824541519994 lon=-73.9803009883494"
+        "heading=272.77001953125 pitch=89.0201187133789 roll=0.1823771148920059"
+        "date=None elevation=None"
+    )
+
+    assert result == expected
