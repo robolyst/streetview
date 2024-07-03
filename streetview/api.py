@@ -1,7 +1,7 @@
 from io import BytesIO
 from typing import Dict, Union
 
-import requests
+import httpx
 from PIL import Image
 from pydantic import BaseModel
 
@@ -31,7 +31,7 @@ def get_panorama_meta(pano_id: str, api_key: str) -> MetaData:
         "https://maps.googleapis.com/maps/api/streetview/metadata"
         f"?pano={pano_id}&key={api_key}"
     )
-    resp = requests.get(url)
+    resp = httpx.get(url)
     return MetaData(**resp.json())
 
 
@@ -73,6 +73,7 @@ def get_streetview(
         "key": api_key,
     }
 
-    response = requests.get(url, params=params, stream=True)
-    img = Image.open(BytesIO(response.content))
-    return img
+    with httpx.stream("GET", url, params=params) as response:
+        response.read()
+        img = Image.open(BytesIO(response.content))
+        return img

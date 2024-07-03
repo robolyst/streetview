@@ -6,7 +6,6 @@ channels:
   - defaults
 
 dependencies:
-  - requests
   - pillow
   - pydantic
   - httpx
@@ -20,7 +19,6 @@ dependencies:
   - black
   - flake8
   - mypy
-  - types-requests
   - types-Pillow
   - build
   - twine
