@@ -154,8 +154,16 @@ def get_panorama(pano_id: str) -> Panorama:
     """
     url = make_pano_url(pano_id)
     resp = requests.get(url)
-    # )]}'
     data = json.loads(resp.text.replace(")]}'", ""))
+
+    dates = re.findall(r"([0-9]?[0-9]?[0-9])?,?\[(20[0-9][0-9]),([0-9]+)\]", resp.text)
+    dates = [list(d)[1:] for d in dates]
+
+    if len(dates) >= 1:
+        dates = [[int(v) for v in d] for d in dates]
+        dates = [d for d in dates if d[1] <= 12 and d[1] >= 1]
+        dates = [f"{d[0]}-{d[1]:02d}" for d in dates]
+
     return Panorama(
         pano_id=pano_id,
         lat=data[1][0][5][0][3][0][0][2][0][2],
@@ -163,6 +171,6 @@ def get_panorama(pano_id: str) -> Panorama:
         heading=data[1][0][5][0][1][2][0],
         pitch=data[1][0][5][0][1][2][1] if len(data[1][0][5][0][1][2]) >= 2 else None,
         roll=data[1][0][5][0][1][2][2] if len(data[1][0][5][0][1][2]) >= 2 else None,
-        date=data[1][3][0] if False else None,
+        date=dates[-1] if len(dates) > 0 else None,
         elevation=data[1][4][0] if False else None,
     )
