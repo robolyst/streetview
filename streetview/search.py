@@ -34,6 +34,26 @@ def make_search_url(lat: float, lon: float) -> str:
     return url.format(lat, lon)
 
 
+def make_pano_url(pano_id: str) -> str:
+    """Builds the URL of the script on Google's servers that returns the metadata 
+    of a given panorama. Must be one of official Street View panoramas, which have
+    a length of 22 characters."""
+
+    url = (
+        "https://www.google.com/maps/photometa/v1?"
+        "pb=!1m4!1smaps_sv.tactile!11m2!2m1!1b1!2"
+        "m2!1sen!2snz!3m3!1m2!1e2!2s{:0}!4m61!1e1"
+        "!1e2!1e3!1e4!1e5!1e6!1e8!1e12!1e17!2m1!1"
+        "e1!4m1!1i48!5m1!1e1!5m1!1e2!6m1!1e1!6m1!"
+        "1e2!9m36!1m3!1e2!2b1!3e2!1m3!1e2!2b0!3e3"
+        "!1m3!1e3!2b1!3e2!1m3!1e3!2b0!3e3!1m3!1e8"
+        "!2b0!3e3!1m3!1e1!2b0!3e3!1m3!1e4!2b0!3e3"
+        "!1m3!1e10!2b1!3e2!1m3!1e10!2b0!3e3!11m2!"
+        "3m1!4b1"
+        
+    )
+    return url.format(pano_id)
+
 def search_request(lat: float, lon: float) -> Response:
     """
     Gets the response of the script on Google's servers that returns the
@@ -126,3 +146,23 @@ def search_panoramas_url_exact(url: str) -> Panorama:
     panos = [pano for pano in panos if pano.pano_id == id]
 
     return panos[0] if len(panos) > 0 else None
+
+
+def get_panorama(pano_id: str) -> Panorama:
+    """
+    Gets a panorama by its id.
+    """
+    url = make_pano_url(pano_id)
+    resp = requests.get(url)
+    # )]}'
+    data = json.loads(resp.text.replace(")]}'", ""))
+    return Panorama(
+        pano_id=pano_id,
+        lat=data[1][0][5][0][3][0][0][2][0][2],
+        lon=data[1][0][5][0][3][0][0][2][0][3],
+        heading=data[1][0][5][0][1][2][0],
+        pitch=data[1][0][5][0][1][2][1] if len(data[1][0][5][0][1][2]) >= 2 else None,
+        roll=data[1][0][5][0][1][2][2] if len(data[1][0][5][0][1][2]) >= 2 else None,
+        date=data[1][3][0] if False else None,
+        elevation=data[1][4][0] if False else None,
+    )
