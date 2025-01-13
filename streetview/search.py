@@ -103,9 +103,14 @@ def parse_url(url: str) -> tuple[str, ...]:
     """
     extracts the lat, lon and pano_id from url
     """
-    return re.search(
-        r"\/@([-+]?[0-9]+[.]?[0-9]*),([-+]?[0-9]+[.]?[0-9]*).+!1s(.+)!2e",
-        url).groups()
+    matches = re.search(
+        r"\/@([-+]?[0-9]+[.]?[0-9]*),([-+]?[0-9]+[.]?[0-9]*).+!1s(.+)!2e", url
+    )
+
+    if matches:
+        return matches.groups()
+
+    return ("", "", "")
 
 
 def search_panoramas_url(url: str) -> list[Panorama]:
@@ -113,10 +118,10 @@ def search_panoramas_url(url: str) -> list[Panorama]:
     Gets the closest panoramas (ids) to the GPS coordinates in the url.
     """
     lat, lon, _ = parse_url(url)
-    return search_panoramas(lat, lon)
+    return search_panoramas(float(lat), float(lon))
 
 
-def search_panoramas_url_exact(url: str) -> Panorama:
+def search_panoramas_url_exact(url: str) -> Panorama | None:
     """
     Searches for exact panorama in url
     """

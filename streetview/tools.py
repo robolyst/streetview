@@ -1,11 +1,14 @@
 from PIL import Image
 
 
-def crop_bottom_and_right_black_border(img: Image.Image):
+def crop_bottom_and_right_black_border(img: Image.Image) -> Image.Image:
     """
     Crop the black border at the bottom and right of the panorama.
-    When you download streetviews get_panorama(), it's common to see black borders at the bottom and right of the image.
-    This is because the dimensions of the panorama are not always correct / multiple of 512, a common issue with user-contributed panoramas.
+    When you download streetviews get_panorama(), it's common to see
+    black borders at the bottom and right of the image. This is because
+    he dimensions of the panorama are not always correct / multiple of
+    512, a common issue with user-contributed panoramas.
+
     The implementation is not perfect, but it works for most cases.
     """
     (width, height) = img.size
@@ -33,8 +36,9 @@ def crop_bottom_and_right_black_border(img: Image.Image):
                 valid_max_y = pixel_cursor[1]
                 break
             else:
-                # A false positive, probably the actual valid bottom pixel is very close to black
-                # Reset the cursor to the next vertical line to the right
+                # A false positive, probably the actual valid bottom pixel is
+                # very close to black Reset the cursor to the next vertical
+                # line to the right
                 pixel_cursor = (pixel_cursor[0] + 1, height - 1)
 
         else:
@@ -60,8 +64,9 @@ def crop_bottom_and_right_black_border(img: Image.Image):
                 valid_max_x = pixel_cursor[0]
                 break
             else:
-                # A false positive, probably the actual valid right pixel is very close to black
-                # Reset the cursor to the next horizontal line below
+                # A false positive, probably the actual valid right pixel
+                # is very close to black Reset the cursor to the next
+                # horizontal line below
                 pixel_cursor = (width - 1, pixel_cursor[1] + 1)
 
         else:
@@ -75,6 +80,7 @@ def crop_bottom_and_right_black_border(img: Image.Image):
         return img
 
     print(
-        f"Found black border. Cropping from {width}x{height} to {valid_width}x{valid_height}"
+        "Found black border."
+        f" Cropping from {width}x{height} to {valid_width}x{valid_height}"
     )
     return img.crop((0, 0, valid_width, valid_height))

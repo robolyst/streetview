@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from streetview import get_streetview, get_panorama_meta
+from streetview import get_panorama_meta, get_streetview
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
 
@@ -16,7 +16,11 @@ def test_readme_metadata_example():
     )
     print(result)
 
-    expected = "date='2019-08' location=Location(lat=41.89820659475458, lng=12.47644649615282) pano_id='_R1mwpMkiqa2p0zp48EBJg' copyright='© Google'"
+    expected = (
+        "date='2019-08'"
+        " location=Location(lat=41.89820659475458, lng=12.47644649615282)"
+        " pano_id='_R1mwpMkiqa2p0zp48EBJg' copyright='© Google'"
+    )
 
     assert str(result) == expected
 
