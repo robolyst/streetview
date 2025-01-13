@@ -20,10 +20,5 @@ setup(
     license="MIT",
     packages=["streetview"],
     zip_safe=False,
-    install_requires=[
-        "requests",
-        "pillow",
-        "pydantic",
-        "httpx"
-    ],
+    install_requires=["requests", "pillow", "pydantic", "httpx"],
 )
