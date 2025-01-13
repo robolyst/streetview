@@ -1,6 +1,7 @@
 name: Style checks and test
 
-on: [push]
+on:
+  push
 
 jobs:
   run_tests:
