@@ -49,14 +49,16 @@ def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
 
 
 def fetch_panorama_tile(
-    tile_info: TileInfo, max_retries: int = DEFAULT_MAX_RETRIES
+    tile_info: TileInfo,
+    max_retries: int = DEFAULT_MAX_RETRIES,
+    timeout: int | None = None,
 ) -> Image.Image:
     """
     Tries to download a tile, returns a PIL Image.
     """
     for _ in range(max_retries):
         try:
-            response = requests.get(tile_info.fileurl, stream=True)
+            response = requests.get(tile_info.fileurl, stream=True, timeout=timeout)
             return Image.open(BytesIO(response.content))
         except requests.ConnectionError:
             print("Connection error. Trying again in 2 seconds.")
@@ -65,14 +67,16 @@ def fetch_panorama_tile(
 
 
 async def fetch_panorama_tile_async(
-    tile_info: TileInfo, max_retries: int = DEFAULT_MAX_RETRIES
+    tile_info: TileInfo,
+    max_retries: int = DEFAULT_MAX_RETRIES,
+    timeout: int | None = None,
 ) -> Image.Image:
     """
     Asynchronously tries to download a tile, returns a PIL Image.
     """
     for _ in range(max_retries):
         try:
-            response = await async_client.get(tile_info.fileurl)
+            response = await async_client.get(tile_info.fileurl, timeout=timeout)
             return Image.open(BytesIO(response.content))
 
         except httpx.RequestError as e:
@@ -100,16 +104,17 @@ def iter_tiles(
     zoom: int,
     max_retries: int = DEFAULT_MAX_RETRIES,
     multi_threaded: bool = False,
+    timeout: int | None = None,
 ) -> Generator[Tile, None, None]:
     if not multi_threaded:
         for info in iter_tile_info(pano_id, zoom):
-            image = fetch_panorama_tile(info, max_retries)
+            image = fetch_panorama_tile(info, max_retries, timeout)
             yield Tile(x=info.x, y=info.y, image=image)
         return
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         future_to_tile = {
-            executor.submit(fetch_panorama_tile, info, max_retries): info
+            executor.submit(fetch_panorama_tile, info, max_retries, timeout): info
             for info in iter_tile_info(pano_id, zoom)
         }
         for future in concurrent.futures.as_completed(future_to_tile):
@@ -125,10 +130,13 @@ def iter_tiles(
 
 
 async def iter_tiles_async(
-    pano_id: str, zoom: int, max_retries: int = DEFAULT_MAX_RETRIES
+    pano_id: str,
+    zoom: int,
+    max_retries: int = DEFAULT_MAX_RETRIES,
+    timeout: int | None = None,
 ) -> AsyncGenerator[Tile, None]:
     for info in iter_tile_info(pano_id, zoom):
-        image = await fetch_panorama_tile_async(info, max_retries)
+        image = await fetch_panorama_tile_async(info, max_retries, timeout)
         yield Tile(x=info.x, y=info.y, image=image)
     return
 
@@ -138,6 +146,7 @@ def get_panorama(
     zoom: int = 5,
     multi_threaded: bool = False,
     max_retries: int = DEFAULT_MAX_RETRIES,
+    timeout: int | None = None,
 ) -> Image.Image:
     """
     Downloads a streetview panorama.
@@ -154,6 +163,7 @@ def get_panorama(
         zoom=zoom,
         multi_threaded=multi_threaded,
         max_retries=max_retries,
+        timeout=timeout,
     ):
         panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
         del tile
@@ -162,7 +172,10 @@ def get_panorama(
 
 
 async def get_panorama_async(
-    pano_id: str, zoom: int, max_retries: int = DEFAULT_MAX_RETRIES
+    pano_id: str,
+    zoom: int,
+    max_retries: int = DEFAULT_MAX_RETRIES,
+    timeout: int | None = None,
 ) -> Image.Image:
     """
     Downloads a streetview panorama by iterating through the tiles asynchronously.
@@ -175,7 +188,10 @@ async def get_panorama_async(
     panorama = Image.new("RGB", (total_width * tile_width, total_height * tile_height))
 
     async for tile in iter_tiles_async(
-        pano_id=pano_id, zoom=zoom, max_retries=max_retries
+        pano_id=pano_id,
+        zoom=zoom,
+        max_retries=max_retries,
+        timeout=timeout,
     ):
         panorama.paste(im=tile.image, box=(tile.x * tile_width, tile.y * tile_height))
         del tile

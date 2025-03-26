@@ -18,7 +18,7 @@ class MetaData(BaseModel):
     copyright: str
 
 
-def get_panorama_meta(pano_id: str, api_key: str) -> MetaData:
+def get_panorama_meta(pano_id: str, api_key: str, timeout: int | None = None) -> MetaData:
     """
     Returns a panorama's metadata.
 
@@ -31,7 +31,7 @@ def get_panorama_meta(pano_id: str, api_key: str) -> MetaData:
         "https://maps.googleapis.com/maps/api/streetview/metadata"
         f"?pano={pano_id}&key={api_key}"
     )
-    resp = requests.get(url)
+    resp = requests.get(url, timeout=timeout)
     return MetaData(**resp.json())
 
 
@@ -73,6 +73,6 @@ def get_streetview(
         "key": api_key,
     }
 
-    response = requests.get(url, params=params, stream=True)
+    response = requests.get(url, params=params, stream=True, timeout=timeout)
     img = Image.open(BytesIO(response.content))
     return img
