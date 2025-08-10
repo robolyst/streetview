@@ -1,0 +1,24 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "remoteEnv": {
+    "PYTHONPATH": "/app:${containerEnv:PYTHONPATH}"
+  },
+  "runArgs": ["--env-file",".env"],
+  "forwardPorts": [8888],  // For Jupyter
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "charliermarsh.ruff",
+        "donjayamanne.githistory",
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "github.copilot",
+        "tamasfe.even-better-toml"
+      ]
+    }
+  }
+}
+.6

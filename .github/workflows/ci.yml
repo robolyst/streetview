@@ -9,14 +9,29 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install dependencies - Python ${{ matrix.python-version }}
-        run: PYTHON_VERSION=${{ matrix.python-version }} make deps
-      - name: Lint
-        run: make check
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Build
+        run: uv build
+
+      - name: Twine check
+        run: uv run twine check dist/*
+
+      - name: Check
+        run: uv run poe check
+
       - name: Test
-        run: make test
+        run: uv run poe test

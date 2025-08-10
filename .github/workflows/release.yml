@@ -14,20 +14,24 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
       - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+        run: uv python install 3.13
 
-      - name: Build source and wheel distributions
+      - name: Set package version
         run: |
-          echo "VERSION = '$(git describe --tags)'" > version.py
-          python -m pip install --upgrade build twine
-          python -m build
-          python -m twine check --strict dist/*
+          # VERSION=$(git describe --tags)
+          VERSION=0.0.0rc202508101
+          uvx --from=toml-cli toml set --toml-path=pyproject.toml project.version $VERSION
+          echo Set package version $VERSION
 
-      - name: Publish distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1.8
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Build
+        run: uv build
+
+      - name: Publish
+        run: uv publish -t ${{ secrets.PYPI_API_TOKEN }}

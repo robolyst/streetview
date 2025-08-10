@@ -1,0 +1,160 @@
+# =============================================================================
+# Project Configuration
+# =============================================================================
+
+[project]
+name = "streetview"
+version = "0.0.0"
+description = "Retrieve current and historical photos from Google Street View"
+readme = "readme.md"
+license = "MIT"
+authors = [
+    { name = "Adrian Letchford", email = "me@dradrian.com" }
+]
+requires-python = ">=3.10"
+
+dependencies = [
+    "httpx>=0.28.1",
+    "jupyter>=1.1.1",
+    "pillow>=11.3.0",
+    "pydantic>=2.11.7",
+    "requests>=2.32.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/robolyst/streetview"
+# Documentation = "https://yourproject.example.com/docs"  # No docs yet
+Source = "https://github.com/robolyst/streetview"
+Issues = "https://github.com/robolyst/streetview/issues"
+
+[dependency-groups]
+dev = [
+    "poethepoet>=0.36.0",
+    "pyright>=1.1.403",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.2.1",
+    "pytest-vcr>=1.0.2",
+    "ruff>=0.12.8",
+    "twine>=6.1.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.8,<0.9.0"]
+build-backend = "uv_build"
+
+# =============================================================================
+# Code linting
+# =============================================================================
+
+[tool.ruff]
+exclude = [
+    "examples",
+]
+
+[tool.ruff.lint]
+# Full list of rules here: https://docs.astral.sh/ruff/rules/
+select = [
+    # Core rules
+    # "E",     # pycodestyle errors
+    "F",     # Pyflakes
+    # "UP",    # pyupgrade
+    "I",     # isort
+    
+    # Quality and style
+    # "B",     # flake8-bugbear
+    "Q",     # flake8-quotes
+    # "SIM",   # flake8-simplify
+    "FLY",   # flynt
+    # "PERF",  # Perflint
+    
+    # Disabled rules (uncomment to enable):
+    # "AIR",   # Airflow
+    # "ERA",   # eradicate
+    # "FAST",  # FastAPI
+    # "YTT",   # flake8-2020
+    # "ANN",   # flake8-annotations
+    # "ASYNC", # flake8-async
+    # "S",     # flake8-bandit - Raises for "asserts" including in tests
+    # "BLE",   # flake8-blind-except
+    # "FBT",   # flake8-boolean-trap
+    # "A",     # flake8-builtins
+    # "COM",   # flake8-commas - Too pedantic
+    # "C4",    # flake8-comprehensions
+    # "CPY",   # flake8-copyright
+    # "DTZ",   # flake8-datetimez
+    # "T10",   # flake8-debugger
+    # "DJ",    # flake8-django
+    # "EM",    # flake8-errmsg
+    # "EXE",   # flake8-executable
+    # "FIX",   # flake8-fixme
+    # "FA",    # flake8-future-annotations
+    # "INT",   # flake8-gettext
+    # "ISC",   # flake8-implicit-str-concat
+    # "ICN",   # flake8-import-conventions
+    # "LOG",   # flake8-logging
+    # "G",     # flake8-logging-format
+    # "INP",   # flake8-no-pep420
+    # "PIE",   # flake8-pie
+    # "T20",   # flake8-print
+    # "PYI",   # flake8-pyi
+    # "PT",    # flake8-pytest-style
+    # "RSE",   # flake8-raise
+    # "RET",   # flake8-return
+    # "SLF",   # flake8-self
+    # "SLOT",  # flake8-slots
+    # "TID",   # flake8-tidy-imports
+    # "TD",    # flake8-todos
+    # "TC",    # flake8-type-checking
+    # "ARG",   # flake8-unused-arguments
+    # "PTH",   # flake8-use-pathlib
+    # "C90",   # mccabe
+    # "NPY",   # NumPy-specific rules
+    # "PD",    # pandas-vet
+    # "N",     # pep8-naming
+    # "DOC",   # pydoclint
+    # "D",     # pydocstyle
+    # "PGH",   # pygrep-hooks
+    # "PL",    # Pylint
+    # "PLC",   # Convention
+    # "PLE",   # Error
+    # "PLR",   # Refactor
+    # "PLW",   # Warning
+    # "FURB",  # refurb
+    # "RUF",   # Ruff-specific rules
+    # "TRY",   # tryceratops
+]
+
+# =============================================================================
+# Static Type Checking
+# =============================================================================
+
+[tool.pyright]
+include = ["src"]
+
+
+# =============================================================================
+# Task Runner Configuration
+# =============================================================================
+
+[tool.poe.tasks]
+
+# Testing
+test.cmd = """
+pytest ./tests
+       --color=yes
+       --cov=src
+       --no-cov-on-fail
+       --cov-fail-under=90
+       --cov-report term-missing:skip-covered
+       --ignore=analytics
+"""
+test.help = "Run the test suite with coverage"
+
+
+# Code Quality
+check.shell = "ruff check && pyright"
+check.help = "Run linting and type checks"
+
+fix.shell = "ruff check --fix && ruff format"
+fix.help = "Auto fix linting and formatting issues"

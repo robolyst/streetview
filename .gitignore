@@ -21,3 +21,5 @@ dist/
 
 # JetBrains IDEs
 .idea/
+
+.ruff_cache

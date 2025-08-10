@@ -1,0 +1,15 @@
+{
+  "python.analysis.diagnosticMode": "workspace",
+  "editor.rulers": [
+    { "column": 88, "color": "#FFFFFF11"},
+    { "column": 100, "color": "#FFFFFF11"},
+  ],
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+      // "source.organizeImports": "explicit"
+    }
+  }
+}
