@@ -1,3 +1,7 @@
+# =============================================================================
+# Project Configuration
+# =============================================================================
+
 [project]
 name = "streetview"
 version = "0.0.0"
@@ -8,6 +12,7 @@ authors = [
     { name = "Adrian Letchford", email = "me@dradrian.com" }
 ]
 requires-python = ">=3.13"
+
 dependencies = [
     "httpx>=0.28.1",
     "jupyter>=1.1.1",
@@ -21,10 +26,6 @@ Homepage = "https://github.com/robolyst/streetview"
 # Documentation = "https://yourproject.example.com/docs"  # No docs yet
 Source = "https://github.com/robolyst/streetview"
 Issues = "https://github.com/robolyst/streetview/issues"
-
-[build-system]
-requires = ["uv_build>=0.8.8,<0.9.0"]
-build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
