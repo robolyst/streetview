@@ -11,7 +11,7 @@ license = "MIT"
 authors = [
     { name = "Adrian Letchford", email = "me@dradrian.com" }
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 
 dependencies = [
     "httpx>=0.28.1",
