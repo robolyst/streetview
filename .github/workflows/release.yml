@@ -25,8 +25,7 @@ jobs:
 
       - name: Set package version
         run: |
-          # VERSION=$(git describe --tags)
-          VERSION=0.0.0rc202508101
+          VERSION=$(git describe --tags)
           uvx --from=toml-cli toml set --toml-path=pyproject.toml project.version $VERSION
           echo Set package version $VERSION
 
