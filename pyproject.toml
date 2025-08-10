@@ -65,7 +65,7 @@ select = [
     # Quality and style
     "B",     # flake8-bugbear
     "Q",     # flake8-quotes
-    # "SIM",   # flake8-simplify
+    "SIM",   # flake8-simplify
     "FLY",   # flynt
     # "PERF",  # Perflint
     

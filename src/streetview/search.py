@@ -60,10 +60,7 @@ def extract_panoramas(text: str) -> list[Panorama]:
 
     raw_panos = subset[3][0]
 
-    if len(subset) < 9 or subset[8] is None:
-        raw_dates = []
-    else:
-        raw_dates = subset[8]
+    raw_dates = [] if (len(subset) < 9 or subset[8] is None) else subset[8]
 
     # For some reason, dates do not include a date for each panorama.
     # the n dates match the last n panos. Here we flip the arrays
