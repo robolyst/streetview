@@ -149,7 +149,7 @@ test.help = "Run the test suite with coverage"
 
 
 # Code Quality
-check.cmd = "ruff check"
+check.shell = "ruff check && pyright"
 check.help = "Run linting and type checks"
 
 fix.shell = "ruff check --fix && ruff format"

@@ -1,6 +1,17 @@
 from PIL import Image
 
 
+def get_pixel_from_bw_image(img: Image.Image, x: int, y: int) -> float:
+    """
+    Get the pixel value from a black and white image.
+    """
+    bw_img = img.convert("L")
+    pixel = bw_img.getpixel((x, y))
+    if pixel is None or isinstance(pixel, tuple):
+        raise ValueError("Invalid pixel value")
+    return pixel
+
+
 def crop_bottom_and_right_black_border(img: Image.Image) -> Image.Image:
     """
     Crop the black border at the bottom and right of the panorama.
@@ -19,7 +30,7 @@ def crop_bottom_and_right_black_border(img: Image.Image) -> Image.Image:
     pixel_cursor = (0, height - 1)
     valid_max_y = height - 1
     while pixel_cursor[0] < width and pixel_cursor[1] >= 0:
-        pixel_color = bw_img.getpixel(pixel_cursor)
+        pixel_color = get_pixel_from_bw_image(bw_img, *pixel_cursor)
 
         if pixel_color > black_luminance:
             # Found a non-black pixel
@@ -48,7 +59,7 @@ def crop_bottom_and_right_black_border(img: Image.Image) -> Image.Image:
     pixel_cursor = (width - 1, 0)
     valid_max_x = width - 1
     while pixel_cursor[1] < height and pixel_cursor[0] >= 0:
-        pixel_color = bw_img.getpixel(pixel_cursor)
+        pixel_color = get_pixel_from_bw_image(bw_img, *pixel_cursor)
 
         if pixel_color > black_luminance:
             # Found a non-black pixel

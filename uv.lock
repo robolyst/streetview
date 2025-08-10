@@ -1936,7 +1936,7 @@ wheels = [
 [[package]]
 name = "streetview"
 version = "0.0.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "httpx" },
     { name = "jupyter" },
