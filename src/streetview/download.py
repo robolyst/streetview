@@ -58,7 +58,7 @@ def fetch_panorama_tile(
         try:
             response = requests.get(tile_info.fileurl, stream=True)
             return Image.open(BytesIO(response.content))
-        except requests.ConnectionError:
+        except requests.ConnectionError:  # noqa: PERF203
             print("Connection error. Trying again in 2 seconds.")
             time.sleep(2)
     raise requests.ConnectionError("Max retries exceeded.")
@@ -75,7 +75,7 @@ async def fetch_panorama_tile_async(
             response = await async_client.get(tile_info.fileurl)
             return Image.open(BytesIO(response.content))
 
-        except httpx.RequestError as e:
+        except httpx.RequestError as e:  # noqa: PERF203
             print(f"Request error {e}. Trying again in 2 seconds.")
             await asyncio.sleep(2)
 

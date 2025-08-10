@@ -67,7 +67,7 @@ select = [
     "Q",     # flake8-quotes
     "SIM",   # flake8-simplify
     "FLY",   # flynt
-    # "PERF",  # Perflint
+    "PERF",  # Perflint
     
     # Disabled rules (uncomment to enable):
     # "AIR",   # Airflow
