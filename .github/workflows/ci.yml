@@ -28,7 +28,7 @@ jobs:
         run: uv build
 
       - name: Check
-        run: poe check
+        run: uv run poe check
 
       - name: Test
         run: poe test
