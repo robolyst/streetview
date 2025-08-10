@@ -53,5 +53,11 @@ jobs:
       - name: Set up Python
         run: uv python install 3.13
 
+      - name: Set package version
+        run: |
+          VERSION=$(git describe --tags)
+          uvx --from=toml-cli toml set --toml-path=pyproject.toml project.version $VERSION
+          echo Set package version $VERSION
+
       - name: Build
         run: uv build
