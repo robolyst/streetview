@@ -5,11 +5,11 @@ interactions:
       Accept:
       - '*/*'
       Accept-Encoding:
-      - gzip, deflate, br, zstd
+      - gzip, deflate
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.32.3
+      - python-requests/2.32.4
     method: GET
     uri: https://cbk0.google.com/cbk?output=tile&panoid=z80QZ1_QgCbYwj7RrmlS0Q&zoom=1&x=0&y=0
   response:
@@ -44,7 +44,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Mon, 13 Jan 2025 09:44:10 GMT
+      - Sun, 10 Aug 2025 16:42:59 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
