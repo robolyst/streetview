@@ -14,9 +14,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
       - name: Install dependencies - Python ${{ matrix.python-version }}
         run: PYTHON_VERSION=${{ matrix.python-version }} make deps
-      - name: Lint
-        run: make check
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Build
+        run: uv build
+
+      - name: Check
+        run: poe check
+
       - name: Test
-        run: make test
+        run: poe test
