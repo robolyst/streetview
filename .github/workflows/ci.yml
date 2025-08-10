@@ -21,9 +21,6 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
-      - name: Install dependencies - Python ${{ matrix.python-version }}
-        run: PYTHON_VERSION=${{ matrix.python-version }} make deps
-
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
 
