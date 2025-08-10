@@ -50,23 +50,24 @@ build-backend = "uv_build"
 [tool.ruff]
 exclude = [
     "examples",
+    ".devcontainer",
 ]
 
 [tool.ruff.lint]
 # Full list of rules here: https://docs.astral.sh/ruff/rules/
 select = [
     # Core rules
-    # "E",     # pycodestyle errors
+    "E",     # pycodestyle errors
     "F",     # Pyflakes
-    # "UP",    # pyupgrade
+    "UP",    # pyupgrade
     "I",     # isort
     
     # Quality and style
-    # "B",     # flake8-bugbear
+    "B",     # flake8-bugbear
     "Q",     # flake8-quotes
-    # "SIM",   # flake8-simplify
+    "SIM",   # flake8-simplify
     "FLY",   # flynt
-    # "PERF",  # Perflint
+    "PERF",  # Perflint
     
     # Disabled rules (uncomment to enable):
     # "AIR",   # Airflow
@@ -130,7 +131,10 @@ select = [
 # =============================================================================
 
 [tool.pyright]
-include = ["src"]
+include = [
+    "src",
+    "tests",
+]
 
 
 # =============================================================================

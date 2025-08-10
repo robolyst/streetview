@@ -4,12 +4,11 @@ import pytest
 
 from streetview import get_panorama_meta, get_streetview
 
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
+GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "NOKEY")
 
 
 @pytest.mark.vcr(filter_query_parameters=["key"])
 def test_readme_metadata_example():
-
     result = get_panorama_meta(
         pano_id="_R1mwpMkiqa2p0zp48EBJg",
         api_key=GOOGLE_MAPS_API_KEY,

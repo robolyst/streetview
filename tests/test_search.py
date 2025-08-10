@@ -10,17 +10,19 @@ from streetview import (
 )
 from streetview.search import Panorama
 
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", None)
+GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "NOKEY")
 
 
 SYDNEY = {
     "lat": -33.8796052,
     "lon": 151.1655341,
+    "result_count": 20,
 }
 
 BELGRAVIA = {
     "lat": 51.4986562,
     "lon": -0.1570917,
+    "result_count": 40,
 }
 
 MIDDLE_OF_OCEAN = {
@@ -34,12 +36,24 @@ TUNIS = {
 }
 
 
-class GenericGetPanoidsTest:
-    def setup_method(self):
-        raise NotImplementedError()
+@pytest.mark.vcr
+@pytest.mark.parametrize("location", [SYDNEY, BELGRAVIA])
+class TestPanodsOnLocations:
+    """Test panoramas in specific locations."""
+
+    @pytest.fixture(scope="function", autouse=True)
+    def setup_method(self, location: dict):
+        lat = location["lat"]
+        lon = location["lon"]
+
+        self.result_count = location["result_count"]
+        self.result = search_panoramas(lat, lon)
 
     def test_that_there_is_at_least_one_item(self):
         assert len(self.result) >= 1
+
+    def test_that_there_are_the_expected_number_of_results(self):
+        assert len(self.result) == self.result_count
 
     def test_that_panoids_are_unique(self):
         panoids = [p.pano_id for p in self.result]
@@ -59,24 +73,6 @@ class GenericGetPanoidsTest:
         ]
 
         assert dates == meta_dates
-
-
-@pytest.mark.vcr
-class TestPanoidsOnSydney(GenericGetPanoidsTest):
-    def setup_method(self):
-        self.result = search_panoramas(**SYDNEY)
-
-    def test_that_there_are_the_expected_number_of_results(self):
-        assert len(self.result) == 20
-
-
-@pytest.mark.vcr
-class TestPanoidsOnBelgravia(GenericGetPanoidsTest):
-    def setup_method(self):
-        self.result = search_panoramas(**BELGRAVIA)
-
-    def test_that_there_are_the_expected_number_of_results(self):
-        assert len(self.result) == 43
 
 
 @pytest.mark.vcr

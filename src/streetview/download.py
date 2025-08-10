@@ -2,9 +2,9 @@ import asyncio
 import concurrent.futures
 import itertools
 import time
+from collections.abc import AsyncGenerator, Generator
 from dataclasses import dataclass
 from io import BytesIO
-from typing import AsyncGenerator, Generator, Tuple
 
 import httpx
 import requests
@@ -30,7 +30,7 @@ class Tile:
     image: Image.Image
 
 
-def get_width_and_height_from_zoom(zoom: int) -> Tuple[int, int]:
+def get_width_and_height_from_zoom(zoom: int) -> tuple[int, int]:
     """
     Returns the width and height of a panorama at a given zoom level, depends on the
     zoom level.
@@ -58,7 +58,7 @@ def fetch_panorama_tile(
         try:
             response = requests.get(tile_info.fileurl, stream=True)
             return Image.open(BytesIO(response.content))
-        except requests.ConnectionError:
+        except requests.ConnectionError:  # noqa: PERF203
             print("Connection error. Trying again in 2 seconds.")
             time.sleep(2)
     raise requests.ConnectionError("Max retries exceeded.")
@@ -75,7 +75,7 @@ async def fetch_panorama_tile_async(
             response = await async_client.get(tile_info.fileurl)
             return Image.open(BytesIO(response.content))
 
-        except httpx.RequestError as e:
+        except httpx.RequestError as e:  # noqa: PERF203
             print(f"Request error {e}. Trying again in 2 seconds.")
             await asyncio.sleep(2)
 
@@ -117,9 +117,8 @@ def iter_tiles(
             try:
                 image = future.result()
             except Exception as exc:
-                raise Exception(
-                    f"Failed to download tile {info.fileurl} due to Exception: {exc}"
-                )
+                msg = f"Failed to download tile {info.fileurl} due to Exception: {exc}"
+                raise Exception(msg) from exc
             else:
                 yield Tile(x=info.x, y=info.y, image=image)
 
