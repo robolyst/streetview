@@ -2,7 +2,7 @@
 name = "streetview"
 version = "0.0.0"
 description = "Retrieve current and historical photos from Google Street View"
-readme = "README.md"
+readme = "readme.md"
 license = "MIT"
 authors = [
     { name = "Adrian Letchford", email = "me@dradrian.com" }
