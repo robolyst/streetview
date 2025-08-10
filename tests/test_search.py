@@ -78,13 +78,17 @@ class TestPanodsOnLocations:
 @pytest.mark.vcr
 def test_readme_search_example():
     result = search_panoramas(lat=41.8982208, lon=12.4764804)[0]
-    print(result)
-    expected = (
-        "pano_id='_R1mwpMkiqa2p0zp48EBJg' lat=41.89820676786453"
-        " lon=12.47644220919742 heading=0.8815613985061646"
-        " pitch=89.001953125 roll=0.1744659692049026 date='2019-08' elevation=None"
+    expected = Panorama(
+        pano_id="_R1mwpMkiqa2p0zp48EBJg",
+        lat=41.89820676786453,
+        lon=12.47644220919742,
+        heading=0.8815613985061646,
+        pitch=89.001953125,
+        roll=0.1744659692049026,
+        date="2019-08",
+        elevation=None,
     )
-    assert str(result) == expected
+    assert result == expected
 
 
 @pytest.mark.vcr
@@ -97,22 +101,8 @@ def test_search_where_there_are_no_results():
 def test_search_where_there_are_no_dates():
     result = search_panoramas(**TUNIS)
 
-    dates = [p.date for p in result]
-    assert dates == [None] * len(dates)
-
-
-@pytest.mark.skip
-def test_coordinates_with_missing_pitch():
-    panos = search_panoramas(35.658353457849685, 139.6920989241623)
-    is_pitch_none = [p.pitch is None for p in panos]
-    assert any(is_pitch_none)
-
-
-@pytest.mark.skip
-def test_coordinates_with_missing_roll():
-    panos = search_panoramas(35.658353457849685, 139.6920989241623)
-    is_roll_none = [p.roll is None for p in panos]
-    assert any(is_roll_none)
+    dates = [p.date for p in result if p.date is not None]
+    assert len(dates) == 0
 
 
 @pytest.mark.vcr
@@ -121,16 +111,17 @@ def test_search_panoramas_url():
         "https://www.google.com/maps/@40.6982454,-73.980301,3a,84.9y,36.94h,99.2t"
         "/data=!3m6!1e1!3m4!1sp-EPpErUWv2pjDvUC3N6rQ!2e0!7i16384!8i8192?entry=ttu"
     )
-    first = panos[0]
-    print(first)
-
-    result = str(first)
-    expected = (
-        "pano_id='Jx-mUVj7jGZDYBvpfjD7Ng' lat=40.69822471286"
-        " lon=-73.98031354290725 heading=275.2777404785156"
-        " pitch=90.3123550415039 roll=358.1669006347656 date='2009-04' elevation=None"
+    result = panos[0]
+    expected = Panorama(
+        pano_id="Jx-mUVj7jGZDYBvpfjD7Ng",
+        lat=40.69822471286,
+        lon=-73.98031354290725,
+        heading=275.2777404785156,
+        pitch=90.3123550415039,
+        roll=358.1669006347656,
+        date="2009-04",
+        elevation=None,
     )
-
     assert result == expected
 
 
@@ -140,9 +131,6 @@ def test_search_panoramas_url_exact():
         "https://www.google.com/maps/@40.6982454,-73.980301,3a,84.9y,36.94h,99.2t"
         "/data=!3m6!1e1!3m4!1sp-EPpErUWv2pjDvUC3N6rQ!2e0!7i16384!8i8192?entry=ttu"
     )
-
-    print(result)
-
     expected = Panorama(
         pano_id="p-EPpErUWv2pjDvUC3N6rQ",
         lat=40.69824541519994,
@@ -153,5 +141,4 @@ def test_search_panoramas_url_exact():
         date="2022-07",
         elevation=None,
     )
-
     assert result == expected
