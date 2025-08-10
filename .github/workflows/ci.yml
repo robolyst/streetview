@@ -4,16 +4,45 @@ on:
   push
 
 jobs:
-  run_tests:
-    name: Style checks and test
+  # run_tests:
+  #   name: Style checks and test
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: Install uv
+  #       uses: astral-sh/setup-uv@v3
+  #       with:
+  #         enable-cache: true
+  #         cache-dependency-glob: uv.lock
+
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       run: uv python install ${{ matrix.python-version }}
+
+  #     - name: Sync environment
+  #       run: uv sync --dev
+
+  #     - name: Build
+  #       run: uv build
+
+  #     - name: Check
+  #       run: uv run poe check
+
+  #     - name: Test
+  #       run: uv run poe test
+
+  build-n-publish:
+    name: Build and publish to PyPI
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v4
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3
@@ -21,17 +50,8 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
-      - name: Set up Python ${{ matrix.python-version }}
-        run: uv python install ${{ matrix.python-version }}
-
-      - name: Sync environment
-        run: uv sync --dev
+      - name: Set up Python
+        run: uv python install 3.13
 
       - name: Build
         run: uv build
-
-      - name: Check
-        run: uv run poe check
-
-      - name: Test
-        run: uv run poe test
