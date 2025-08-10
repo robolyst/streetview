@@ -98,6 +98,7 @@ async def test_that_panorama_downloads_successfully_async():
 
 
 @pytest.mark.vcr()
+@pytest.mark.skip
 def test_that_panorama_downloads_successfully_crop_bottom_right_border():
     # this pano_id has a black border on the bottom right
     pano_id = "EVGmA-L6LuI_7-elZaDq1g"

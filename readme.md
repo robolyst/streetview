@@ -1,5 +1,8 @@
 # streetview
 
+[![PyPI version](https://badge.fury.io/py/streetview.svg)](https://badge.fury.io/py/streetview)
+[![PyPI Downloads](https://static.pepy.tech/badge/streetview)](https://pepy.tech/projects/streetview)
+
 This is a light module for downloading photos from Google street view. The
 functions allow you to retrieve current and **old** photos. Google does have an
 API for accessing Street View. However, it does not allow you to access old
