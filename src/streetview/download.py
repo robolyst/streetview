@@ -117,9 +117,8 @@ def iter_tiles(
             try:
                 image = future.result()
             except Exception as exc:
-                raise Exception(
-                    f"Failed to download tile {info.fileurl} due to Exception: {exc}"
-                )
+                msg = f"Failed to download tile {info.fileurl} due to Exception: {exc}"
+                raise Exception(msg) from exc
             else:
                 yield Tile(x=info.x, y=info.y, image=image)
 

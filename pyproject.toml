@@ -63,7 +63,7 @@ select = [
     "I",     # isort
     
     # Quality and style
-    # "B",     # flake8-bugbear
+    "B",     # flake8-bugbear
     "Q",     # flake8-quotes
     # "SIM",   # flake8-simplify
     "FLY",   # flynt
