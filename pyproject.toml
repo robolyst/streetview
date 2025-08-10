@@ -16,6 +16,12 @@ dependencies = [
     "requests>=2.32.4",
 ]
 
+[project.urls]
+Homepage = "https://github.com/robolyst/streetview"
+# Documentation = "https://yourproject.example.com/docs"  # No docs yet
+Source = "https://github.com/robolyst/streetview"
+Issues = "https://github.com/robolyst/streetview/issues"
+
 [build-system]
 requires = ["uv_build>=0.8.8,<0.9.0"]
 build-backend = "uv_build"
