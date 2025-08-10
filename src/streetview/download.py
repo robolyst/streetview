@@ -2,9 +2,9 @@ import asyncio
 import concurrent.futures
 import itertools
 import time
+from collections.abc import AsyncGenerator, Generator
 from dataclasses import dataclass
 from io import BytesIO
-from typing import AsyncGenerator, Generator, Tuple
 
 import httpx
 import requests
@@ -30,7 +30,7 @@ class Tile:
     image: Image.Image
 
 
-def get_width_and_height_from_zoom(zoom: int) -> Tuple[int, int]:
+def get_width_and_height_from_zoom(zoom: int) -> tuple[int, int]:
     """
     Returns the width and height of a panorama at a given zoom level, depends on the
     zoom level.

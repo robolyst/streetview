@@ -50,15 +50,16 @@ build-backend = "uv_build"
 [tool.ruff]
 exclude = [
     "examples",
+    ".devcontainer",
 ]
 
 [tool.ruff.lint]
 # Full list of rules here: https://docs.astral.sh/ruff/rules/
 select = [
     # Core rules
-    # "E",     # pycodestyle errors
+    "E",     # pycodestyle errors
     "F",     # Pyflakes
-    # "UP",    # pyupgrade
+    "UP",    # pyupgrade
     "I",     # isort
     
     # Quality and style

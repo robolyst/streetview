@@ -1,6 +1,5 @@
 import json
 import re
-from typing import List, Optional
 
 import requests
 from pydantic import BaseModel
@@ -12,10 +11,10 @@ class Panorama(BaseModel):
     lat: float
     lon: float
     heading: float
-    pitch: Optional[float]
-    roll: Optional[float]
-    date: Optional[str]
-    elevation: Optional[float]
+    pitch: float | None
+    roll: float | None
+    date: str | None
+    elevation: float | None
 
 
 def make_search_url(lat: float, lon: float) -> str:
@@ -43,7 +42,7 @@ def search_request(lat: float, lon: float) -> Response:
     return requests.get(url)
 
 
-def extract_panoramas(text: str) -> List[Panorama]:
+def extract_panoramas(text: str) -> list[Panorama]:
     """
     Given a valid response from the panoids endpoint, return a list of all the
     panoids.
@@ -89,7 +88,7 @@ def extract_panoramas(text: str) -> List[Panorama]:
     ]
 
 
-def search_panoramas(lat: float, lon: float) -> List[Panorama]:
+def search_panoramas(lat: float, lon: float) -> list[Panorama]:
     """
     Gets the closest panoramas (ids) to the GPS coordinates.
     """
