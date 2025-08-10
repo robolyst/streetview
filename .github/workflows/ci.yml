@@ -24,9 +24,6 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
 
-      - name: Sync environment
-        run: uv sync --dev
-
       - name: Build
         run: uv build
 
