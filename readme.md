@@ -65,16 +65,6 @@ image = get_streetview(
 image.save("image.jpg", "jpeg")
 ```
 
-To download the panorama in an asynchronous context:
-
-```python
-from streetview import get_panorama_async
-
-image = await get_panorama_async(pano_id="z80QZ1_QgCbYwj7RrmlS0Q")
-
-image.save("image.jpg", "jpeg")
-```
-
 ## Download panorama
 
 You can download a full panorama like this:
@@ -87,12 +77,12 @@ image = get_panorama(pano_id="z80QZ1_QgCbYwj7RrmlS0Q")
 image.save("image.jpg", "jpeg")
 ```
 
-# Development
+To download the panorama in an asynchronous context:
 
-Run tests with:
-```bash
-make test
+```python
+from streetview import get_panorama_async
+
+image = await get_panorama_async(pano_id="z80QZ1_QgCbYwj7RrmlS0Q")
+
+image.save("image.jpg", "jpeg")
 ```
-this will install mamba and the required Python packages into a local env.
-
-If you want to rebuild VCR cassettes, you will need to copy `.env-example` to `.env` and add your Google Maps API Key.
