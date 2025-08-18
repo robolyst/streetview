@@ -19,3 +19,5 @@ ADD .devcontainer/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_con
 RUN apt install -y git zsh wget
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 ENV SHELL /usr/bin/zsh
+
+ENV PYTHONPATH="${PYTHONPATH}:/workspaces/streetview/src"
