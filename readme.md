@@ -24,7 +24,7 @@ Install from pip with:
 
 ## Search for Panoramas
 
-The photos on Google street view are panoramas. Each parnorama has its own
+The photos on Google street view are panoramas. Each panorama has its own
 unique ID. Retrieving photos is a two step process. First, you must translate GPS
 coordinates into panorama IDs. The following code retrieves a list of
 the closest panoramas:
