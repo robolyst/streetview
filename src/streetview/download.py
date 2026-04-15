@@ -46,7 +46,7 @@ def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
         # "https://cbk0.google.com/cbk"
         # f"?output=tile&panoid={pano_id}&zoom={zoom}&x={x}&y={y}"
         "https://streetviewpixels-pa.googleapis.com/v1/tile"
-        f"?cb_client=maps_sv.tactile&panoid={pano_id}&x={x}&y={y}&zoom={zoom}"
+        f"?panoid={pano_id}&x={x}&y={y}&zoom={zoom}"
     )
 
 
