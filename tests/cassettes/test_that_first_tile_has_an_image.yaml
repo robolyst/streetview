@@ -11,7 +11,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://cbk0.google.com/cbk?output=tile&panoid=z80QZ1_QgCbYwj7RrmlS0Q&zoom=1&x=0&y=0
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=z80QZ1_QgCbYwj7RrmlS0Q&x=0&y=0&zoom=1
   response:
     body:
       string: !!binary |
@@ -44,7 +44,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Sun, 10 Aug 2025 16:42:59 GMT
+      - Wed, 15 Apr 2026 18:11:15 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
