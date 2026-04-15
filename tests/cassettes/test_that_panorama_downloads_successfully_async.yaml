@@ -9,11 +9,11 @@ interactions:
       connection:
       - keep-alive
       host:
-      - cbk0.google.com
+      - streetviewpixels-pa.googleapis.com
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://cbk0.google.com/cbk?output=tile&panoid=qtpYC28QnAbluW4jTNNjSg&zoom=1&x=0&y=0
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=qtpYC28QnAbluW4jTNNjSg&x=0&y=0&zoom=1
   response:
     body:
       string: !!binary |
@@ -897,7 +897,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Sun, 10 Aug 2025 16:47:47 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -923,11 +923,11 @@ interactions:
       connection:
       - keep-alive
       host:
-      - cbk0.google.com
+      - streetviewpixels-pa.googleapis.com
       user-agent:
       - python-httpx/0.28.1
     method: GET
-    uri: https://cbk0.google.com/cbk?output=tile&panoid=qtpYC28QnAbluW4jTNNjSg&zoom=1&x=1&y=0
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=qtpYC28QnAbluW4jTNNjSg&x=1&y=0&zoom=1
   response:
     body:
       string: !!binary |
@@ -1889,7 +1889,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Sun, 10 Aug 2025 16:47:47 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:

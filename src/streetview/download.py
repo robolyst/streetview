@@ -43,8 +43,10 @@ def make_download_url(pano_id: str, zoom: int, x: int, y: int) -> str:
     Returns the URL to download a tile.
     """
     return (
-        "https://cbk0.google.com/cbk"
-        f"?output=tile&panoid={pano_id}&zoom={zoom}&x={x}&y={y}"
+        # "https://cbk0.google.com/cbk"
+        # f"?output=tile&panoid={pano_id}&zoom={zoom}&x={x}&y={y}"
+        "https://streetviewpixels-pa.googleapis.com/v1/tile"
+        f"?panoid={pano_id}&x={x}&y={y}&zoom={zoom}"
     )
 
 

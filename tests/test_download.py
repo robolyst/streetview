@@ -102,3 +102,19 @@ def test_that_panorama_downloads_successfully_crop_bottom_right_border():
     # image.save("after_crop.jpg", "jpeg")
     hash = hash_image(image)
     assert hash == "e42d2d6207cd09d7b6d10d49c0a8305b"
+
+
+@pytest.mark.vcr()
+def test_on_image_that_throws_UnidentifiedImageError():
+    image = get_panorama(pano_id="wjwbitsbvzc3jEOJBUGAuA", zoom=1)
+    # image.save("test_that_panorama_downloads_successfully.jpg", "jpeg")
+    hash = hash_image(image)
+    assert hash == "51e07b1e48ed196f112900822e149fd3"
+
+
+@pytest.mark.vcr()
+def test_on_image_that_throws_UnidentifiedImageError_2():
+    image = get_panorama(pano_id="z80QZ1_QgCbYwj7RrmlS0Q", zoom=1)
+    # image.save("test_that_panorama_downloads_successfully.jpg", "jpeg")
+    hash = hash_image(image)
+    assert hash == "2cb63ac70e437b828bc64cdf71cd6fdd"

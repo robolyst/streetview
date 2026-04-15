@@ -9,9 +9,9 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.31.0
+      - python-requests/2.32.4
     method: GET
-    uri: https://cbk0.google.com/cbk?output=tile&panoid=z80QZ1_QgCbYwj7RrmlS0Q&zoom=1&x=3&y=1
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=z80QZ1_QgCbYwj7RrmlS0Q&x=3&y=1&zoom=1
   response:
     body:
       string: !!binary |
@@ -44,7 +44,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 14 Jun 2023 18:32:49 GMT
+      - Wed, 15 Apr 2026 18:17:18 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
