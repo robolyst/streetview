@@ -11,7 +11,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -237,7 +237,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:33 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -265,7 +265,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -849,7 +849,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:33 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -877,7 +877,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -1177,7 +1177,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:33 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -1205,7 +1205,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=0&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -1265,7 +1265,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:33 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -1293,7 +1293,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -1464,7 +1464,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:33 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -1492,7 +1492,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -2090,7 +2090,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:33 GMT
+      - Wed, 15 Apr 2026 18:17:19 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -2118,7 +2118,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -2430,7 +2430,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -2458,7 +2458,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=1&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -2526,7 +2526,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -2554,7 +2554,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -2747,7 +2747,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -2775,7 +2775,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -3346,7 +3346,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -3374,7 +3374,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -3674,7 +3674,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -3702,7 +3702,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=2&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -3774,7 +3774,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -3802,7 +3802,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -4155,7 +4155,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -4183,7 +4183,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -4630,7 +4630,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -4658,7 +4658,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -4952,7 +4952,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -4980,7 +4980,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=3&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -5041,7 +5041,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -5069,7 +5069,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -5440,7 +5440,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -5468,7 +5468,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -6007,7 +6007,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -6035,7 +6035,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -6306,7 +6306,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -6334,7 +6334,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=4&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -6404,7 +6404,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -6432,7 +6432,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -6826,7 +6826,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -6854,7 +6854,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -7387,7 +7387,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:34 GMT
+      - Wed, 15 Apr 2026 18:17:20 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -7415,7 +7415,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -7715,7 +7715,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:21 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -7743,7 +7743,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=5&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -7810,7 +7810,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:21 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -7838,7 +7838,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -8126,7 +8126,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:21 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -8154,7 +8154,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -8674,7 +8674,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:22 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -8702,7 +8702,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -9010,7 +9010,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:22 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -9038,7 +9038,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=6&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -9097,7 +9097,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:22 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -9125,7 +9125,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=0&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=0&zoom=3
   response:
     body:
       string: !!binary |
@@ -9158,7 +9158,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:22 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -9186,7 +9186,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=1&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=1&zoom=3
   response:
     body:
       string: !!binary |
@@ -9219,7 +9219,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:22 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -9247,7 +9247,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=2&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=2&zoom=3
   response:
     body:
       string: !!binary |
@@ -9280,7 +9280,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:22 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
@@ -9308,7 +9308,7 @@ interactions:
       User-Agent:
       - python-requests/2.32.4
     method: GET
-    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?cb_client=maps_sv.tactile&panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=3&zoom=3
+    uri: https://streetviewpixels-pa.googleapis.com/v1/tile?panoid=EVGmA-L6LuI_7-elZaDq1g&x=7&y=3&zoom=3
   response:
     body:
       string: !!binary |
@@ -9341,7 +9341,7 @@ interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Wed, 15 Apr 2026 18:11:35 GMT
+      - Wed, 15 Apr 2026 18:17:22 GMT
       Server:
       - scaffolding on HTTPServer2
       Vary:
